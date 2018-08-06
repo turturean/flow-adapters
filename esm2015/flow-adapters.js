@@ -1,0 +1,12 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
+export { FlowAdaptersService, FlowAdaptersModule } from './public_api';
+export { EntityModelService as ɵb } from './entity/model.service';
+export { SearchPaginationModelService as ɵa } from './search-pagination/model.service';
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZmxvdy1hZGFwdGVycy5qcyIsInNvdXJjZVJvb3QiOiJuZzovL2Zsb3ctYWRhcHRlcnMvIiwic291cmNlcyI6WyJmbG93LWFkYXB0ZXJzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7QUFJQSx3REFBYyxjQUFjLENBQUM7QUFFN0IsT0FBTyxFQUFDLGtCQUFrQixJQUFJLEVBQUUsRUFBQyxNQUFNLHdCQUF3QixDQUFDO0FBQ2hFLE9BQU8sRUFBQyw0QkFBNEIsSUFBSSxFQUFFLEVBQUMsTUFBTSxtQ0FBbUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogR2VuZXJhdGVkIGJ1bmRsZSBpbmRleC4gRG8gbm90IGVkaXQuXG4gKi9cblxuZXhwb3J0ICogZnJvbSAnLi9wdWJsaWNfYXBpJztcblxuZXhwb3J0IHtFbnRpdHlNb2RlbFNlcnZpY2UgYXMgybVifSBmcm9tICcuL2VudGl0eS9tb2RlbC5zZXJ2aWNlJztcbmV4cG9ydCB7U2VhcmNoUGFnaW5hdGlvbk1vZGVsU2VydmljZSBhcyDJtWF9IGZyb20gJy4vc2VhcmNoLXBhZ2luYXRpb24vbW9kZWwuc2VydmljZSc7Il19

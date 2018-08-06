@@ -1,11 +1,11 @@
 {
   "name": "flow-adapters",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "peerDependencies": {
     "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
     "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
   },
-  "homepage": "https://github.com/danspol/ngrx-adapters",
+  "homepage": "https://github.com/danspol/flow-adapters",
   "main": "bundles/flow-adapters.umd.js",
   "module": "fesm5/flow-adapters.js",
   "es2015": "fesm2015/flow-adapters.js",

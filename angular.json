@@ -1,0 +1,127 @@
+{
+  "version": 1,
+  "projects": {
+    "flow-adapters": {
+      "projectType": "application",
+      "root": "apps/flow-adapters",
+      "sourceRoot": "apps/flow-adapters/src",
+      "prefix": "flow-adapters",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/flow-adapters",
+            "index": "apps/flow-adapters/src/index.html",
+            "main": "apps/flow-adapters/src/main.ts",
+            "polyfills": "apps/flow-adapters/src/polyfills.ts",
+            "tsConfig": "apps/flow-adapters/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "apps/flow-adapters/src/favicon.ico",
+              "apps/flow-adapters/src/assets"
+            ],
+            "styles": ["apps/flow-adapters/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "apps/flow-adapters/src/environments/environment.ts",
+                  "with": "apps/flow-adapters/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "flow-adapters:build:production"
+            },
+            "development": {
+              "browserTarget": "flow-adapters:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "flow-adapters:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/flow-adapters/src/**/*.ts",
+              "apps/flow-adapters/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/flow-adapters"],
+          "options": {
+            "jestConfig": "apps/flow-adapters/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "tags": []
+    },
+    "flow-adapters-e2e": {
+      "root": "apps/flow-adapters-e2e",
+      "sourceRoot": "apps/flow-adapters-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/flow-adapters-e2e/cypress.json",
+            "devServerTarget": "flow-adapters:serve:development"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "flow-adapters:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/flow-adapters-e2e/**/*.{js,ts}"]
+          }
+        }
+      },
+      "tags": [],
+      "implicitDependencies": ["flow-adapters"]
+    }
+  }
+}

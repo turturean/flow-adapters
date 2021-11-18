@@ -21,7 +21,7 @@ export interface SearchAdapter<T> {
 export function createSearchAdapter<T>(options: {
   stateKey: string;
   type: string;
-  primaryKey?: string,
+  primaryKey?: string;
   initialState?: Partial<SearchState<T>>;
 }): SearchAdapter<T> {
   const { type, stateKey, primaryKey = 'id', initialState } = options;

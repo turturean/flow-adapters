@@ -134,6 +134,11 @@
           "options": {
             "tsConfig": "libs/search/tsconfig.lib.json",
             "project": "libs/search/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/search/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {

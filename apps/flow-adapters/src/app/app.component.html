@@ -15,17 +15,17 @@
 
 <p>Entities</p>
 <pre
->{{ userModel.entities$ | async | json }}
+  >{{ userModel.entities$ | async | json }}
 </pre>
 
 <p>Ids</p>
 <pre
->{{ userModel.ids$ | async | json }}
+  >{{ userModel.ids$ | async | json }}
 </pre>
 
 <p>Error</p>
 <pre
->{{ userModel.error$ | async | json }}
+  >{{ userModel.error$ | async | json }}
 </pre>
 
 <button (click)="$event.stopPropagation(); userSearch()">Search</button>

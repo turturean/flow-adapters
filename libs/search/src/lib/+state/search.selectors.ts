@@ -1,5 +1,4 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { EntityState } from '@ngrx/entity';
 import { MemoizedSelector } from '@ngrx/store/src/selector';
 
 import {
@@ -24,14 +23,11 @@ export interface SearchSelectors<T, S> {
 
 export function createSearchSelectors<T>(
   stateKey: string
-): SearchSelectors<T, EntityState<T>> {
+): SearchSelectors<T, SearchState<T>> {
   const selectState = createFeatureSelector<SearchState<T>>(stateKey);
 
   const error = createSelector(selectState, (state) => state.error);
-  const isLoading = createSelector(
-    selectState,
-    (state) => state.isLoading
-  );
+  const isLoading = createSelector(selectState, (state) => state.isLoading);
   const pagination = createSelector(selectState, (state) => {
     const { perPage, page, total } = state;
 
@@ -45,10 +41,8 @@ export function createSearchSelectors<T>(
   const sort = createSelector(selectState, (state) => state.sort);
   const ids = createSelector(selectState, (state) => state.ids);
   const entities = createSelector(selectState, (state) => state.entities);
-  const selectEntities = createSelector(
-    ids,
-    entities,
-    (ids, entities) => ids.map(id => entities[id])
+  const selectEntities = createSelector(ids, entities, (ids, entities) =>
+    ids.map((id) => entities[id])
   );
 
   return {

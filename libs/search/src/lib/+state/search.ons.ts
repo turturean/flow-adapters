@@ -43,8 +43,7 @@ export function createSearchOns<T, Q>(
       const ids = entities.map<string>((entity: any) => entity[primaryKey]);
       const newEntities = entities.reduce<{ [key: string]: T }>(
         (accumulator, entity) => {
-
-          if(primaryKey in entity) {
+          if (primaryKey in entity) {
             // @ts-ignore
             const key = entity[primaryKey];
             accumulator[key] = entity;

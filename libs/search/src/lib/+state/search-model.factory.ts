@@ -24,7 +24,10 @@ export class SearchModel<T> implements SearchModelInterface<T> {
   error$: Observable<SearchError | null>;
   ids$: Observable<string[]>;
 
-  constructor(public store: Store<SearchState<T>>, protected adapter: SearchAdapter<T>) {
+  constructor(
+    public store: Store<SearchState<T>>,
+    protected adapter: SearchAdapter<T>
+  ) {
     this.selectors = this.adapter.getSelectors();
     this.actions = this.adapter.getActions();
 

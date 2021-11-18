@@ -1,5 +1,5 @@
 import { userAdapter } from './app.adapter';
-import {createReducer} from "@ngrx/store";
+import { createReducer } from '@ngrx/store';
 
 // use directly reducer
 // export const reducers = {
@@ -12,9 +12,9 @@ const userReducer = createReducer(
     ...userAdapter.getInitialState(),
     // other initialState
   },
-  ...userAdapter.getOns(),
+  ...userAdapter.getOns()
   // other adapters or custom ons
-)
+);
 export const reducers = {
   users: userReducer,
 };

@@ -19,6 +19,7 @@
     "@angular/platform-browser": "^12.2.0",
     "@angular/platform-browser-dynamic": "^12.2.0",
     "@angular/router": "^12.2.0",
+    "@flow-adapters/search": "file:dist/libs/search",
     "@ngrx/effects": "^12.5.1",
     "@ngrx/entity": "^12.5.1",
     "@ngrx/store": "^12.5.1",

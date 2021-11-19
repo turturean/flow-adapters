@@ -5,10 +5,10 @@ import {
   SearchModelInterface,
   SearchPagination,
   SearchQuery,
+  SearchSelectors,
   SearchSort,
   SearchState,
 } from './search.models';
-import { SearchSelectors } from './search.selectors';
 import { SearchEntityStateAdapter } from './search.actions';
 import { SearchAdapter } from './search.adapter';
 

@@ -1,25 +1,6 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
-import { MemoizedSelector } from '@ngrx/store/src/selector';
 
-import {
-  SearchError,
-  SearchQuery,
-  SearchSort,
-  SearchState,
-} from './search.models';
-
-export interface SearchSelectors<T, S> {
-  selectIds: MemoizedSelector<S, string[]>;
-  selectEntities: MemoizedSelector<S, T[]>;
-  selectError: MemoizedSelector<S, SearchError | null>;
-  selectQuery: MemoizedSelector<S, SearchQuery>;
-  selectSort: MemoizedSelector<S, SearchSort | null>;
-  selectIsLoading: MemoizedSelector<S, boolean>;
-  selectPagination: MemoizedSelector<
-    S,
-    { perPage: number; page: number; total: number }
-  >;
-}
+import { SearchSelectors, SearchState } from './search.models';
 
 export function createSearchSelectors<T>(
   stateKey: string
@@ -37,7 +18,7 @@ export function createSearchSelectors<T>(
       total,
     };
   });
-  const query = createSelector(selectState, (state) => state.query);
+  const query = createSelector(selectState, (state) => state.query || {});
   const sort = createSelector(selectState, (state) => state.sort);
   const ids = createSelector(selectState, (state) => state.ids);
   const entities = createSelector(selectState, (state) => state.entities);

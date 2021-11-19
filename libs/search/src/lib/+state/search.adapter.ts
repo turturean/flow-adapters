@@ -5,8 +5,8 @@ import {
   SearchEntityStateAdapter,
 } from './search.actions';
 import { createSearchReducer } from './search.reducer';
-import { createSearchSelectors, SearchSelectors } from './search.selectors';
-import { SearchState } from './search.models';
+import { createSearchSelectors } from './search.selectors';
+import { SearchSelectors, SearchState } from './search.models';
 import { createSearchOns } from './search.ons';
 import { ReducerTypes } from '@ngrx/store/src/reducer_creator';
 

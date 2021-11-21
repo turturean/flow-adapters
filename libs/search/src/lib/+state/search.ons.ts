@@ -1,9 +1,9 @@
 import { ReducerTypes } from '@ngrx/store/src/reducer_creator';
 import { on } from '@ngrx/store';
+import { ActionCreator } from '@ngrx/store/src/models';
 
 import { SearchEntityStateAdapter } from './search.actions';
 import { SearchState } from './search.models';
-import { ActionCreator } from '@ngrx/store/src/models';
 
 export function createSearchOns<T, Q>(
   initialState: SearchState<T>,

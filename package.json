@@ -1,17 +1,16 @@
 {
   "name": "flow-adapters",
   "version": "0.0.0",
-  "license": "MIT",
   "scripts": {
     "ng": "nx",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start": "nx serve",
     "build": "nx build",
-    "search:build": "nx run search:build",
+    "search:build": "nx run search:build --configuration production",
     "search:test": "nx run search:test",
     "test": "nx test"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "^12.2.0",
     "@angular/common": "^12.2.0",
@@ -21,12 +20,12 @@
     "@angular/platform-browser": "^12.2.0",
     "@angular/platform-browser-dynamic": "^12.2.0",
     "@angular/router": "^12.2.0",
-    "@flow-adapters/search": "file:dist/libs/search",
     "@ngrx/effects": "^12.5.1",
     "@ngrx/entity": "^12.5.1",
     "@ngrx/store": "^12.5.1",
     "@ngrx/store-devtools": "^12.5.1",
     "@nrwl/angular": "12.10.0",
+    "flow-adapters-search": "0.0.2",
     "ng-packagr": "^12.2.5",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@flow-adapters/search": ["libs/search/src/index.ts"]
+      "flow-adapters-search": ["libs/search/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,6 +1,7 @@
 {
-  "name": "@flow-adapters/search",
-  "version": "0.0.1",
+  "name": "flow-adapters-search",
+  "private": false,
+  "version": "0.0.2",
   "peerDependencies": {
     "@angular/common": "^10.2.*",
     "@angular/core": "^10.2.*",

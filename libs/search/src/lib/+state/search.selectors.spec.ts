@@ -1,8 +1,8 @@
 import {
-  createSearchSelectors,
+  createSearchAdapter,
   SearchSelectors,
   SearchState,
-} from '@flow-adapters/search';
+} from 'flow-adapters-search';
 
 type TestType = {
   id: string;
@@ -14,25 +14,23 @@ describe('Search Selectors', () => {
     id: 'id',
     name: 'test',
   };
-  let initialState: SearchState<TestType>;
-  let selectors: SearchSelectors<TestType, SearchState<TestType>>;
-
-  beforeEach(() => {
-    initialState = {
+  let adapter = createSearchAdapter<TestType>({
+    stateKey: 'users',
+    type: 'user',
+    initialState: {
       ids: ['1'],
       entities: {
         '1': entity,
       },
-      primaryKey: 'id',
-      isLoading: false,
-      error: null,
-      query: {},
-      sort: null,
-      page: 1,
-      perPage: 10,
-      total: 0,
-    };
-    selectors = createSearchSelectors('test');
+    },
+    primaryKey: 'uniqId',
+  });
+  let initialState: SearchState<TestType>;
+  let selectors: SearchSelectors<TestType, SearchState<TestType>>;
+
+  beforeEach(() => {
+    initialState = adapter.getInitialState();
+    selectors = adapter.getSelectors();
   });
 
   describe('#selectIds', () => {

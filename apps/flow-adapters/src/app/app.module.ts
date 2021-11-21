@@ -6,7 +6,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { reducers } from '../+store/app.reducer';
 import { UserModel } from '../+store/user-model';
-import { createSearchModelFactory } from '@flow-adapters/search';
+import { createSearchModelFactory } from 'flow-adapters-search';
 import { userAdapter } from '../+store/app.adapter';
 import { EffectsModule } from '@ngrx/effects';
 import { UserEffect } from '../+store/user.effect';

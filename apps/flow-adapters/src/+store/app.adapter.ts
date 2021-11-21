@@ -1,4 +1,4 @@
-import { createSearchAdapter } from '@flow-adapters/search';
+import { createSearchAdapter } from 'flow-adapters-search';
 
 export const userAdapter = createSearchAdapter({
   stateKey: 'users',

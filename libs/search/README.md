@@ -1,7 +1,5 @@
-# search
+# @flow-search
+<hr>
+Reactive libraries for Angular
 
-This library was generated with [Nx](https://nx.dev).
-
-## Running unit tests
-
-Run `nx test search` to execute the unit tests.
+Please file issues and pull requests against that repo.

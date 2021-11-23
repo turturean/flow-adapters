@@ -6,9 +6,14 @@
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start": "nx serve",
     "build": "nx build",
-    "search:build": "nx run search:build --configuration production",
+    "format:check": "nx format:check --all",
+    "format:write": "nx format:write --all",
+    "search:build": "nx run search:build --configuration production --with-deps --skip-nx-cache",
     "search:test": "nx run search:test",
-    "test": "nx test"
+    "select:build": "nx run select:build --configuration production --with-deps --skip-nx-cache",
+    "select:test": "nx run select:test",
+    "test": "nx test",
+    "prepare": "husky install"
   },
   "private": false,
   "dependencies": {
@@ -54,10 +59,17 @@
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
+    "husky": "^7.0.4",
     "jest": "27.2.3",
     "jest-preset-angular": "10.0.1",
     "prettier": "^2.3.1",
     "ts-jest": "27.0.5",
     "typescript": "~4.3.5"
-  }
+  },
+  "contributors": [
+    {
+      "email": "dorin.turturean@gmail.com",
+      "name": "Dorin Turturean"
+    }
+  ]
 }

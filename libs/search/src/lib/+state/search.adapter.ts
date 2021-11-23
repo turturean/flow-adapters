@@ -10,12 +10,12 @@ import { SearchSelectors, SearchState } from './search.models';
 import { createSearchOns } from './search.ons';
 import { ReducerTypes } from '@ngrx/store/src/reducer_creator';
 
-export interface SearchAdapter<T> {
+export interface SearchAdapter<T, S extends SearchState<T>> {
   getActions: () => SearchEntityStateAdapter<T>;
-  getSelectors: () => SearchSelectors<T, SearchState<T>>;
-  getReducer: () => ActionReducer<SearchState<T>, Action>;
-  getInitialState: () => SearchState<T>;
-  getOns: () => ReducerTypes<SearchState<T>, readonly ActionCreator[]>[];
+  getSelectors: () => SearchSelectors<T, S>;
+  getReducer: () => ActionReducer<S, Action>;
+  getInitialState: () => S;
+  getOns: () => ReducerTypes<S, readonly ActionCreator[]>[];
 }
 
 export function createSearchAdapter<T>(options: {
@@ -23,7 +23,7 @@ export function createSearchAdapter<T>(options: {
   type: string;
   primaryKey?: string;
   initialState?: Partial<SearchState<T>>;
-}): SearchAdapter<T> {
+}): SearchAdapter<T, SearchState<T>> {
   const { type, stateKey, primaryKey = 'id', initialState } = options;
   const currentState: SearchState<T> = {
     perPage: 10,
@@ -34,7 +34,7 @@ export function createSearchAdapter<T>(options: {
     error: null,
     ids: [],
     entities: {},
-    primaryKey: primaryKey,
+    primaryKey: primaryKey || 'id',
     sort: null,
     ...initialState,
   };

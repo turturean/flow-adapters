@@ -5,13 +5,13 @@ import { ActionCreator } from '@ngrx/store/src/models';
 import { SearchEntityStateAdapter } from './search.actions';
 import { SearchState } from './search.models';
 
-export function createSearchOns<T, Q>(
+export function createSearchOns<T>(
   initialState: SearchState<T>,
   actions: SearchEntityStateAdapter<T>
 ): ReducerTypes<SearchState<T>, readonly ActionCreator[]>[] {
   return [
     on(actions.search, (state, { query, pagination, sort }) => {
-      let newState: Partial<SearchState<T>> = {
+      const newState: Partial<SearchState<T>> = {
         isLoading: true,
       };
 

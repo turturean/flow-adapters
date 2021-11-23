@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 @Injectable()
 export class UserEffect {
   private num = 0;
+
   userSearch$ = createEffect(() =>
     this.actions$.pipe(
       ofType(userActions.search),

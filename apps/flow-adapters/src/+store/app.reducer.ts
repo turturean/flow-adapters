@@ -2,59 +2,41 @@ import {
   Product,
   productAdapter,
   selectAdapter,
-  User,
+  USER_STATE_KEY,
   userAdapter,
+  UserState,
 } from './app.adapter';
-import { mergeReducers } from '../tools/tools';
 import { SearchState } from 'flow-adapters-search';
-import { SelectState } from 'flow-adapters-select';
-import { createReducer } from '@ngrx/store';
+import { Action, ActionReducer } from '@ngrx/store/src/models';
 
-// // use directly reducer
-// export interface AppState {
-//   userSelection: SelectState,
-//   users: SearchState<any>,
-//   products: SearchState<any>;
-// }
-// export const reducers = {
-//   users: userAdapter.getReducer(),
-//   selections: selectAdapter.getReducer(),
-//   products: productAdapter.getReducer(),
-// };
+function mergeReducers<TState>(
+  reducers: ActionReducer<any, Action>[] = []
+): ActionReducer<TState, Action> {
+  if (reducers.length === 0) {
+    console.error('At least one reducer it is required');
+  }
 
-// // Solution 1 combine reducers into 1 state
-// export interface AppState {
-//   users: SearchState<any> | SelectState,
-//   products: SearchState<any>;
-// }
-//
-// const userReducer = mergeReducers(
-//   selectAdapter.getReducer(),
-//   userAdapter.getReducer(),
-// );
-//
-// export const reducers = {
-//   users: userReducer,
-//   products: productAdapter.getReducer(),
-// };
+  return (state: TState | undefined, action: Action): TState => {
+    const newState = reducers.reduce((initialState, reducer) => {
+      return reducer(initialState, action);
+    }, state);
+
+    return newState ? (newState as TState) : (state as TState);
+  };
+}
 
 // Solution combine reducers into 1 state
 export interface AppState {
-  users: SearchState<User> | SelectState;
+  [USER_STATE_KEY]: UserState;
   products: SearchState<Product>;
 }
 
-const userReducer = createReducer(
-  {
-    ...selectAdapter.getInitialState(),
-    ...userAdapter.getInitialState(),
-  },
-  ...selectAdapter.getOns(),
-  // @ts-ignore
-  ...userAdapter.getOns()
-);
+const userReducer = mergeReducers<UserState>([
+  selectAdapter.getReducer(),
+  userAdapter.getReducer(),
+]);
 
 export const reducers = {
-  users: userReducer,
+  [USER_STATE_KEY]: userReducer,
   products: productAdapter.getReducer(),
 };

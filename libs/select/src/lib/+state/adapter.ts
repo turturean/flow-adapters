@@ -7,7 +7,7 @@ import { createSelectSelectors } from './selectors';
 import { SelectSelectors, SelectState } from './models';
 import { createSelectOns } from './ons';
 
-export interface Adapter<T, S extends SelectState<T>> {
+export interface Adapter<T, S extends SelectState<T> = SelectState<T>> {
   getActions: () => SelectStateAdapter<T>;
   getSelectors: () => SelectSelectors<T, S>;
   getReducer: () => ActionReducer<S, Action>;
@@ -15,31 +15,35 @@ export interface Adapter<T, S extends SelectState<T>> {
   getOns: () => ReducerTypes<S, readonly ActionCreator[]>[];
 }
 
-export function createSelectAdapter<T = string>(
+export function createSelectAdapter<
+  T = string,
+  S extends SelectState<T> = SelectState<T>
+>(
   options: {
     stateKey: string;
     type: string;
-    initialState?: Partial<SelectState<T>>;
+    initialState?: Partial<S>;
   } = {
     stateKey: '',
     type: '',
   }
-): Adapter<T, SelectState<T>> {
-  const { type, stateKey, initialState } = options;
-  const currentState: SelectState<T> = {
+): Adapter<T, S> {
+  const { type, stateKey } = options;
+  // @ts-ignore
+  const initialState: S = {
     selectedItems: [],
-    ...initialState,
+    ...options.initialState,
   };
   const actions = createSelectActions<T>(type);
-  const adapterOns = createSelectOns(currentState, actions);
-  const reducer = createSelectReducer<T>(currentState, adapterOns);
+  const ons = createSelectOns<S, T>(initialState, actions);
+  const reducer = createSelectReducer<S>(initialState, ons);
   const selectors = createSelectSelectors<T>(stateKey);
 
   return {
     getActions: () => actions,
     getSelectors: () => selectors,
     getReducer: () => reducer,
-    getInitialState: () => currentState,
-    getOns: () => adapterOns,
+    getInitialState: () => initialState,
+    getOns: () => ons,
   };
 }

@@ -12,7 +12,7 @@ export class SelectModel<T> implements SelectModelInterface<T> {
 
   constructor(
     public store: Store<SelectState<T>>,
-    protected adapter: Adapter<T, SelectState<T>>
+    protected adapter: Adapter<T>
   ) {
     this.selectors = this.adapter.getSelectors();
     this.actions = this.adapter.getActions();
@@ -29,9 +29,7 @@ export class SelectModel<T> implements SelectModelInterface<T> {
   }
 }
 
-export function createSelectModelFactory<T>(
-  adapter: Adapter<T, SelectState<T>>
-) {
+export function createSelectModelFactory<T>(adapter: Adapter<T>) {
   return function (store: Store<SelectState<T>>): SelectModel<T> {
     return new SelectModel(store, adapter);
   };

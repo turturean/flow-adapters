@@ -26,7 +26,7 @@ export class SearchModel<T> implements SearchModelInterface<T> {
 
   constructor(
     public store: Store<SearchState<T>>,
-    protected adapter: SearchAdapter<T, SearchState<T>>
+    protected adapter: SearchAdapter<T>
   ) {
     this.selectors = this.adapter.getSelectors();
     this.actions = this.adapter.getActions();
@@ -56,9 +56,7 @@ export class SearchModel<T> implements SearchModelInterface<T> {
   }
 }
 
-export function createSearchModelFactory<T>(
-  adapter: SearchAdapter<T, SearchState<T>>
-) {
+export function createSearchModelFactory<T>(adapter: SearchAdapter<T>) {
   return function (store: Store<SearchState<T>>): SearchModel<T> {
     return new SearchModel(store, adapter);
   };

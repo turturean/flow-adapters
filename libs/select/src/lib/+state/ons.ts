@@ -5,13 +5,13 @@ import { ActionCreator } from '@ngrx/store/src/models';
 import { SelectStateAdapter } from './actions';
 import { SelectState } from './models';
 
-export function createSelectOns<T, S extends SelectState<T>>(
+export function createSelectOns<S extends SelectState<T>, T>(
   initialState: S,
   actions: SelectStateAdapter<T>
 ): ReducerTypes<S, readonly ActionCreator[]>[] {
   return [
     on(actions.select, (state, { selectedItem }) => {
-      const currentSelection: SelectState<T> = {
+      const currentSelection = {
         selectedItems: state.selectedItems,
       };
 

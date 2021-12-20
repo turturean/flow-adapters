@@ -6,26 +6,30 @@ import {
 } from './search.actions';
 import { createSearchReducer } from './search.reducer';
 import { createSearchSelectors } from './search.selectors';
-import { SearchSelectors, SearchState } from './search.models';
+import { SearchEntity, SearchSelectors, SearchState } from './search.models';
 import { createSearchOns } from './search.ons';
 import { ReducerTypes } from '@ngrx/store/src/reducer_creator';
 
-export interface SearchAdapter<T, S extends SearchState<T>> {
+export interface SearchAdapter<T> {
   getActions: () => SearchEntityStateAdapter<T>;
-  getSelectors: () => SearchSelectors<T, S>;
-  getReducer: () => ActionReducer<S, Action>;
-  getInitialState: () => S;
-  getOns: () => ReducerTypes<S, readonly ActionCreator[]>[];
+  getSelectors: () => SearchSelectors<T, SearchState<T>>;
+  getReducer: () => ActionReducer<SearchState<T>, Action>;
+  getInitialState: () => SearchState<T>;
+  getOns: () => ReducerTypes<SearchState<T>, readonly ActionCreator[]>[];
 }
 
-export function createSearchAdapter<T>(options: {
+export type SearchAdapterOptions<T> = {
   stateKey: string;
   type: string;
   primaryKey?: string;
   initialState?: Partial<SearchState<T>>;
-}): SearchAdapter<T, SearchState<T>> {
-  const { type, stateKey, primaryKey = 'id', initialState } = options;
-  const currentState: SearchState<T> = {
+};
+
+export function createSearchAdapter<T extends SearchEntity = SearchEntity>(
+  options: SearchAdapterOptions<T>
+): SearchAdapter<T> {
+  const { type, stateKey, primaryKey = 'id' } = options;
+  const initialState: SearchState<T> = {
     perPage: 10,
     page: 1,
     isLoading: false,
@@ -36,18 +40,58 @@ export function createSearchAdapter<T>(options: {
     entities: {},
     primaryKey: primaryKey || 'id',
     sort: null,
-    ...initialState,
+    ...options.initialState,
   };
   const actions = createSearchActions<T>(type);
-  const adapterOns = createSearchOns(currentState, actions);
-  const reducer = createSearchReducer<T>(currentState, adapterOns);
+  const ons = createSearchOns(initialState, actions);
+  const reducer = createSearchReducer<T>(initialState, ons);
   const selectors = createSearchSelectors<T>(stateKey);
 
   return {
     getActions: () => actions,
     getSelectors: () => selectors,
     getReducer: () => reducer,
-    getInitialState: () => currentState,
-    getOns: () => adapterOns,
+    getInitialState: () => initialState,
+    getOns: () => ons,
   };
 }
+
+export function createSearchTestAdapter<T>(options: SearchAdapterOptions<T>) {
+  const { type, stateKey, primaryKey = 'id' } = options;
+
+  const initialState: SearchState<T> = {
+    perPage: 10,
+    page: 1,
+    isLoading: false,
+    total: 0,
+    query: {},
+    error: null,
+    ids: [],
+    entities: {},
+    primaryKey: primaryKey || 'id',
+    sort: null,
+    ...options.initialState,
+  };
+  const actions = createSearchActions<T>(type);
+  const ons = createSearchOns(initialState, actions);
+  const reducer = createSearchReducer<T>(initialState, ons);
+  const selectors = createSearchSelectors<T>(stateKey);
+
+  return {
+    ...actions,
+    ...selectors,
+    reducer,
+    initialState,
+    ons,
+  };
+}
+//
+// function create<T>(options: T) {
+//   // const newOptions = { label: 'Test' };
+//
+//   type val = typeof options[keyof typeof options];
+//   type final = { [key in val as `user${string & key}`]: any };
+//
+//   return {} as final;
+// }
+//

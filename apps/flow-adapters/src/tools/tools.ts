@@ -9,6 +9,7 @@ export function mergeReducers<TState>(
 
   return (state: TState | undefined, action: Action): TState => {
     if (action.type === INIT) {
+      // Call all reducer with initial states
       return reducers.reduce((initialState, reducer) => {
         return { ...initialState, ...reducer(state, action) };
       }, state) as TState;

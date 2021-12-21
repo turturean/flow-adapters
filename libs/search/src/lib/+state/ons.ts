@@ -2,16 +2,16 @@ import { ReducerTypes } from '@ngrx/store/src/reducer_creator';
 import { on } from '@ngrx/store';
 import { ActionCreator } from '@ngrx/store/src/models';
 
-import { SearchEntityStateAdapter } from './search.actions';
-import { SearchState } from './search.models';
+import { SearchEntityStateAdapter } from './actions';
+import { SearchEntity, SearchState } from './models';
 
-export function createSearchOns<T, Q>(
+export function createSearchOns<T extends SearchEntity = SearchEntity>(
   initialState: SearchState<T>,
   actions: SearchEntityStateAdapter<T>
 ): ReducerTypes<SearchState<T>, readonly ActionCreator[]>[] {
   return [
     on(actions.search, (state, { query, pagination, sort }) => {
-      let newState: Partial<SearchState<T>> = {
+      const newState: Partial<SearchState<T>> = {
         isLoading: true,
       };
 
@@ -40,11 +40,12 @@ export function createSearchOns<T, Q>(
     }),
     on(actions.searchSuccess, (state, { entities, pagination }) => {
       const { primaryKey } = state;
-      const ids = entities.map<string>((entity: any) => entity[primaryKey]);
+      const ids = entities.map<string>(
+        (entity: SearchEntity) => entity[primaryKey]
+      );
       const newEntities = entities.reduce<{ [key: string]: T }>(
         (accumulator, entity) => {
           if (primaryKey in entity) {
-            // @ts-ignore
             const key = entity[primaryKey];
             accumulator[key] = entity;
           }

@@ -1,6 +1,6 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { SearchSelectors, SearchState } from './search.models';
+import { SearchSelectors, SearchState } from './models';
 
 export function createSearchSelectors<T>(
   stateKey: string

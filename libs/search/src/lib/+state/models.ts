@@ -1,25 +1,38 @@
 import { Observable } from 'rxjs';
 import { MemoizedSelector } from '@ngrx/store/src/selector';
+import { SearchEntityStateAdapter } from './actions';
+import { Action, ActionReducer } from '@ngrx/store/src/models';
 
-export interface SearchPagination {
+export type Adapter<T> = SearchEntityStateAdapter<T> &
+  SearchSelectors<T, SearchState<T>> & {
+    reducer: ActionReducer<SearchState<T>, Action>;
+  } & {
+    initialState: SearchState<T>;
+  };
+
+export type SearchEntity = {
+  [key: string]: any;
+};
+
+export type SearchPagination = {
   page: number;
   perPage: number;
-}
+};
 
-export interface SearchQuery {
-  [key: string]: any;
-}
+export type SearchQuery = {
+  [key: string]: unknown;
+};
 
-export interface SearchSort {
+export type SearchSort = {
   sortColumn: string;
   sortDir: string;
-}
+};
 
-export interface SearchError {
-  [key: string]: any;
-}
+export type SearchError = {
+  [key: string]: unknown;
+};
 
-export interface SearchState<T> extends SearchPagination {
+export type SearchState<T extends SearchEntity> = SearchPagination & {
   ids: string[];
   entities: { [key: string]: T };
   primaryKey: string;
@@ -28,9 +41,12 @@ export interface SearchState<T> extends SearchPagination {
   query: SearchQuery;
   sort: SearchSort | null;
   total: number;
-}
+};
 
-export interface SearchSelectors<T, S> {
+export interface SearchSelectors<
+  T extends SearchEntity = SearchEntity,
+  S extends SearchState<T> = SearchState<T>
+> {
   selectIds: MemoizedSelector<S, string[]>;
   selectEntities: MemoizedSelector<S, T[]>;
   selectError: MemoizedSelector<S, SearchError | null>;

@@ -46,5 +46,10 @@
       "style": "scss"
     }
   },
-  "defaultProject": "flow-adapters"
+  "defaultProject": "flow-adapters",
+  "projects": {
+    "select": {
+      "tags": []
+    }
+  }
 }

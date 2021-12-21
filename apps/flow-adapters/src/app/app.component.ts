@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { UserModel } from '../+store/user-model';
-import { selectActions } from '../+store/app.adapter';
+import { selectAdapter } from '../+store/app.adapter';
 import { AppState } from '../+store/app.reducer';
 
 @Component({
@@ -14,7 +14,7 @@ export class AppComponent {
   title = 'flow-adapters';
 
   constructor(public userModel: UserModel, private store: Store<AppState>) {
-    store.dispatch(selectActions.select({ selectedItem: [] }));
+    store.dispatch(selectAdapter.select({ selectedItem: [] }));
     userModel.searchQuery({ test: '123' });
   }
 

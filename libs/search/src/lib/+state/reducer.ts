@@ -1,8 +1,8 @@
-import { createReducer, on } from '@ngrx/store';
+import { createReducer } from '@ngrx/store';
 import { Action, ActionCreator, ActionReducer } from '@ngrx/store/src/models';
 import { ReducerTypes } from '@ngrx/store/src/reducer_creator';
 
-import { SearchState } from './search.models';
+import { SearchState } from './models';
 
 export function createSearchReducer<T>(
   initialState: SearchState<T>,

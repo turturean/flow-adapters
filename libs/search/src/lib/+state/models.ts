@@ -1,5 +1,14 @@
 import { Observable } from 'rxjs';
 import { MemoizedSelector } from '@ngrx/store/src/selector';
+import { SearchEntityStateAdapter } from './actions';
+import { Action, ActionReducer } from '@ngrx/store/src/models';
+
+export type Adapter<T> = SearchEntityStateAdapter<T> &
+  SearchSelectors<T, SearchState<T>> & {
+    reducer: ActionReducer<SearchState<T>, Action>;
+  } & {
+    initialState: SearchState<T>;
+  };
 
 export type SearchEntity = {
   [key: string]: any;

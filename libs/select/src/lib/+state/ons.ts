@@ -7,18 +7,19 @@ import { SelectState } from './models';
 
 export function createSelectOns<S extends SelectState<T>, T>(
   initialState: S,
-  actions: SelectStateAdapter<T>
+  actions: SelectStateAdapter<T>,
+  selectedItems = 'selectedItems'
 ): ReducerTypes<S, readonly ActionCreator[]>[] {
   return [
     on(actions.select, (state, { selectedItem }) => {
       const currentSelection = {
-        selectedItems: state.selectedItems,
+        [selectedItems]: state.selectedItems,
       };
 
       if (Array.isArray(selectedItem)) {
-        currentSelection.selectedItems = selectedItem;
+        currentSelection[selectedItems] = selectedItem;
       } else if (selectedItem) {
-        currentSelection.selectedItems = [selectedItem];
+        currentSelection[selectedItems] = [selectedItem];
       }
 
       return {

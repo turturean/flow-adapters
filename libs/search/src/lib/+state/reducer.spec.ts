@@ -1,5 +1,6 @@
-import { createSearchAdapter, SearchState } from 'flow-adapters-search';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
+import { createSearchAdapter } from './adapter';
+import { SearchState } from './models';
 
 type TestType = {
   id: string;
@@ -7,7 +8,7 @@ type TestType = {
 };
 
 describe('Search Reducer', () => {
-  let adapter = createSearchAdapter<TestType>({
+  const adapter = createSearchAdapter<TestType>({
     stateKey: 'users',
     type: 'user',
     primaryKey: 'uniqId',
@@ -16,8 +17,8 @@ describe('Search Reducer', () => {
   let reducer: ActionReducer<SearchState<TestType>, Action>;
 
   beforeEach(() => {
-    initialState = adapter.getInitialState();
-    reducer = adapter.getReducer();
+    initialState = adapter.initialState;
+    reducer = adapter.reducer;
   });
 
   describe('Unknown action', () => {

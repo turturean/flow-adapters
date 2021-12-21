@@ -5,7 +5,7 @@ import {
   SearchPagination,
   SearchQuery,
   SearchSort,
-} from './search.models';
+} from './models';
 
 import { capitalize } from '../tools/tools';
 

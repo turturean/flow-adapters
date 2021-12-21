@@ -1,28 +1,20 @@
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { SelectState, SelectModelInterface, SelectSelectors } from './models';
-import { SelectStateAdapter } from './actions';
-import { Adapter } from './adapter';
+import { SelectState, SelectModelInterface, Adapter } from './models';
 
 export class SelectModel<T> implements SelectModelInterface<T> {
-  protected selectors: SelectSelectors<T, SelectState<T>>;
-  protected actions: SelectStateAdapter<T>;
-
   items$: Observable<T[]>;
 
   constructor(
     public store: Store<SelectState<T>>,
     protected adapter: Adapter<T>
   ) {
-    this.selectors = this.adapter.getSelectors();
-    this.actions = this.adapter.getActions();
-
-    this.items$ = this.store.select(this.selectors.selectItems);
+    this.items$ = this.store.select(this.adapter.selectItems);
   }
 
   select(selectItems: T[] | T): void {
     this.store.dispatch(
-      this.actions.select({
+      this.adapter.select({
         selectedItem: Array.isArray(selectItems) ? selectItems : [selectItems],
       })
     );

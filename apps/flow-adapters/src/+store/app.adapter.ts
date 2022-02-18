@@ -11,7 +11,7 @@ export interface User {
 }
 export type UserState = SearchState<User> & SelectState<string, string>;
 
-export const userAdapter = createSearchAdapter<User>({
+export const userAdapter = createSearchAdapter({
   stateKey: USER_STATE_KEY,
   type: 'user',
   primaryKey: 'uniqId',
@@ -28,9 +28,8 @@ export type Product = {
   id: string;
   uniqId: string;
 };
-export const productAdapter = createSearchAdapter<Product>({
+export const productAdapter = createSearchAdapter({
   stateKey: PRODUCT_STATE_KEY,
-  initialState: {},
   type: 'products',
   primaryKey: 'id',
 });

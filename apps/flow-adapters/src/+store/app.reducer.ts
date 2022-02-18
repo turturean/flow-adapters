@@ -8,9 +8,9 @@ import {
   UserState,
 } from './app.adapter';
 import { SearchState } from 'flow-adapters-search';
+import { createReducer, on } from '@ngrx/store';
 
 import { mergeReducers } from '../tools/tools';
-import { createReducer, on } from '@ngrx/store';
 import { logOut } from './app.actions';
 
 const initialState = {};
@@ -29,11 +29,11 @@ export interface AppState {
 
 const userReducer = mergeReducers<UserState>([
   selectAdapter.reducer,
-  userAdapter.reducer,
+  userAdapter.getReducer(),
   appReducer,
 ]);
 
 export const reducers = {
   [USER_STATE_KEY]: userReducer,
-  [PRODUCT_STATE_KEY]: productAdapter.reducer,
+  [PRODUCT_STATE_KEY]: productAdapter.getReducer(),
 };

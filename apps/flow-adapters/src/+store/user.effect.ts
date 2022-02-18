@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { userAdapter } from './app.adapter';
 import { delay, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { userSearch, userSearchFailed, userSearchSuccess } from './app.actions';
 
 @Injectable()
 export class UserEffect {
@@ -10,18 +10,18 @@ export class UserEffect {
 
   userSearch$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(userAdapter.search),
+      ofType(userSearch),
       switchMap((action) => {
         this.num++;
 
         return of(
           this.num % 2
-            ? userAdapter.searchFailed({
+            ? userSearchFailed({
                 error: {
                   message: 'Some api error',
                 },
               })
-            : userAdapter.searchSuccess({
+            : userSearchSuccess({
                 pagination: { perPage: 30, page: 1, total: 1 },
                 entities: [
                   {

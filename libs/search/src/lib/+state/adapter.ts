@@ -1,21 +1,29 @@
 import { createSearchActions } from './actions';
 import { createSearchReducer } from './reducer';
 import { createSearchSelectors } from './selectors';
-import { Adapter, SearchEntity, SearchState } from './models';
-import { createSearchOns } from './ons';
+import { SearchActions, SearchState } from './models';
+import { ActionTypes, Adapter, AdapterConfig, SelectorTypes } from './types';
+import { capitalizeObjectPropsWithPrefix } from '../tools/tools';
 
-export type SearchAdapterOptions<T> = {
-  stateKey: string;
-  type: string;
+export type SearchAdapterOptions<AdapterName, AdapterState> = AdapterConfig<
+  AdapterName,
+  AdapterState
+> & {
   primaryKey?: string;
-  initialState?: Partial<SearchState<T>>;
 };
 
-export function createSearchAdapter<T extends SearchEntity = SearchEntity>(
-  options: SearchAdapterOptions<T>
-): Adapter<T> {
+export function createSearchAdapter<
+  Entity extends { [key: string]: any },
+  AdapterName extends string = string,
+  AdapterState extends SearchState<Entity> = SearchState<Entity>
+>(
+  options: SearchAdapterOptions<AdapterName, AdapterState>
+): ActionTypes<AdapterName, SearchActions<Entity>> &
+  SelectorTypes<AdapterState, AdapterName> &
+  Adapter<SearchActions<Entity>, AdapterState, AdapterName> {
   const { type, stateKey, primaryKey = 'id' } = options;
-  const initialState: SearchState<T> = {
+  // @ts-ignore
+  const initialState: AdapterState = {
     perPage: 10,
     page: 1,
     isLoading: false,
@@ -24,19 +32,25 @@ export function createSearchAdapter<T extends SearchEntity = SearchEntity>(
     error: null,
     ids: [],
     entities: {},
-    primaryKey: primaryKey || 'id',
+    primaryKey: primaryKey,
     sort: null,
     ...options.initialState,
   };
-  const actions = createSearchActions<T>(type);
-  const ons = createSearchOns(initialState, actions);
-  const reducer = createSearchReducer<T>(initialState, ons);
-  const selectors = createSearchSelectors<T>(stateKey);
+  const actions = createSearchActions<Entity>(type);
+  const reducer = createSearchReducer<AdapterState, Entity>(
+    initialState,
+    actions
+  );
+  const selectors = createSearchSelectors(stateKey, initialState, type);
 
   return {
-    ...actions,
+    getActions: () => actions,
+    ...capitalizeObjectPropsWithPrefix<
+      ActionTypes<AdapterName, SearchActions<Entity>>
+    >(actions, type),
+    getSelectors: () => selectors,
     ...selectors,
-    reducer,
-    initialState,
+    getReducer: () => reducer,
+    getInitialState: () => initialState,
   };
 }

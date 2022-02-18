@@ -1,31 +1,31 @@
 <p>Query</p>
-<pre
-  >{{ userModel.query$ | async | json }}
+<pre>
+  {{ query$ | async | json }}
 </pre>
 
 <p>Sort</p>
-<pre
-  >{{ userModel.sort$ | async | json }}
+<pre>
+  {{ sort$ | async | json }}
 </pre>
 
 <p>isLoading</p>
-<pre
-  >{{ userModel.isLoading$ | async }}
+<pre>
+  {{ isLoading$ | async }}
 </pre>
 
 <p>Entities</p>
-<pre
-  >{{ userModel.entities$ | async | json }}
+<pre>
+  {{ entities$ | async | json }}
 </pre>
 
 <p>Ids</p>
-<pre
-  >{{ userModel.ids$ | async | json }}
+<pre>
+  {{ ids$ | async | json }}
 </pre>
 
 <p>Error</p>
-<pre
-  >{{ userModel.error$ | async | json }}
+<pre>
+  {{ error$ | async | json }}
 </pre>
 
 <button (click)="$event.stopPropagation(); userSearch()">Search</button>

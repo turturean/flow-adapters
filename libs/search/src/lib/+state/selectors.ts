@@ -1,38 +1,26 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { SearchSelectors, SearchState } from './models';
+import { SelectorTypes } from './types';
+import { capitalize } from '../tools/tools';
+import { SearchState } from './models';
 
-export function createSearchSelectors<T>(
-  stateKey: string
-): SearchSelectors<T, SearchState<T>> {
-  const selectState = createFeatureSelector<SearchState<T>>(stateKey);
+export function createSearchSelectors<
+  State extends SearchState<any>,
+  AdapterName = string
+>(
+  stateKey: string,
+  initialState: State,
+  type: AdapterName
+): SelectorTypes<State, AdapterName> {
+  const selectState = createFeatureSelector<State>(stateKey);
+  const keys = Object.keys(initialState) as (keyof SearchState<any>)[];
 
-  const error = createSelector(selectState, (state) => state.error);
-  const isLoading = createSelector(selectState, (state) => state.isLoading);
-  const pagination = createSelector(selectState, (state) => {
-    const { perPage, page, total } = state;
+  return keys.reduce((acc, key) => {
+    const propKey = `select${capitalize(String(type))}${capitalize(key)}`;
 
     return {
-      perPage,
-      page,
-      total,
+      ...acc,
+      [propKey]: createSelector(selectState, (state) => state && state[key]),
     };
-  });
-  const query = createSelector(selectState, (state) => state.query || {});
-  const sort = createSelector(selectState, (state) => state.sort);
-  const ids = createSelector(selectState, (state) => state.ids);
-  const entities = createSelector(selectState, (state) => state.entities);
-  const selectEntities = createSelector(ids, entities, (ids, entities) =>
-    ids.map((id) => entities[id])
-  );
-
-  return {
-    selectIds: ids,
-    selectEntities: selectEntities,
-    selectError: error,
-    selectQuery: query,
-    selectSort: sort,
-    selectIsLoading: isLoading,
-    selectPagination: pagination,
-  };
+  }, {} as SelectorTypes<State, AdapterName>);
 }

@@ -1,14 +1,4 @@
-import { Observable } from 'rxjs';
-import { MemoizedSelector } from '@ngrx/store/src/selector';
-import { SearchEntityStateAdapter } from './actions';
-import { Action, ActionReducer } from '@ngrx/store/src/models';
-
-export type Adapter<T> = SearchEntityStateAdapter<T> &
-  SearchSelectors<T, SearchState<T>> & {
-    reducer: ActionReducer<SearchState<T>, Action>;
-  } & {
-    initialState: SearchState<T>;
-  };
+import { ActionCreator, TypedAction } from '@ngrx/store/src/models';
 
 export type SearchEntity = {
   [key: string]: any;
@@ -32,9 +22,40 @@ export type SearchError = {
   [key: string]: unknown;
 };
 
-export type SearchState<T extends SearchEntity> = SearchPagination & {
+export interface PropsSearch {
+  sort?: SearchSort;
+  query?: SearchQuery;
+  pagination?: SearchPagination;
+}
+export interface PropsSearchSuccess<T> {
+  entities: T[];
+  pagination: SearchPagination & { total: number };
+}
+
+export interface PropsSearchFailed {
+  error: SearchError | null;
+}
+
+export type SearchActions<T> = {
+  search: ActionCreator<
+    string,
+    (props: PropsSearch) => PropsSearch & TypedAction<string>
+  >;
+  searchSuccess: ActionCreator<
+    string,
+    (
+      props: PropsSearchSuccess<T>
+    ) => PropsSearchSuccess<T> & TypedAction<string>
+  >;
+  searchFailed: ActionCreator<
+    string,
+    (props: PropsSearchFailed) => PropsSearchFailed & TypedAction<string>
+  >;
+};
+
+export type SearchState<Entity> = SearchPagination & {
   ids: string[];
-  entities: { [key: string]: T };
+  entities: { [key: string]: Entity };
   primaryKey: string;
   isLoading: boolean;
   error: SearchError | null;
@@ -42,32 +63,3 @@ export type SearchState<T extends SearchEntity> = SearchPagination & {
   sort: SearchSort | null;
   total: number;
 };
-
-export interface SearchSelectors<
-  T extends SearchEntity = SearchEntity,
-  S extends SearchState<T> = SearchState<T>
-> {
-  selectIds: MemoizedSelector<S, string[]>;
-  selectEntities: MemoizedSelector<S, T[]>;
-  selectError: MemoizedSelector<S, SearchError | null>;
-  selectQuery: MemoizedSelector<S, SearchQuery>;
-  selectSort: MemoizedSelector<S, SearchSort | null>;
-  selectIsLoading: MemoizedSelector<S, boolean>;
-  selectPagination: MemoizedSelector<
-    S,
-    { perPage: number; page: number; total: number }
-  >;
-}
-
-export interface SearchModelInterface<T> {
-  query$: Observable<SearchQuery>;
-  sort$: Observable<SearchSort | null>;
-  pagination$: Observable<SearchPagination>;
-  entities$: Observable<T[]>;
-  error$: Observable<SearchError | null>;
-  ids$: Observable<string[]>;
-
-  search(query: SearchQuery, pagination: SearchPagination): void;
-  searchQuery(query: SearchQuery): void;
-  searchWithPagination(pagination: SearchPagination): void;
-}

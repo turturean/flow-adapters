@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { UserModel } from '../+store/user-model';
-import { selectAdapter } from '../+store/app.adapter';
-import { AppState } from '../+store/app.reducer';
+import { selectAdapter, UserState } from '../+store/app.adapter';
+import { userSearch } from '../+store/app.actions';
+import {
+  getUsers,
+  selectUserError,
+  selectUserIds,
+  selectUserIsLoading,
+  selectUserQuery,
+  selectUserSort,
+} from '../+store/app.selectors';
 
 @Component({
   selector: 'flow-adapters-root',
@@ -13,12 +20,19 @@ import { AppState } from '../+store/app.reducer';
 export class AppComponent {
   title = 'flow-adapters';
 
-  constructor(public userModel: UserModel, private store: Store<AppState>) {
+  entities$ = this.store.select(getUsers);
+  ids$ = this.store.select(selectUserIds);
+  isLoading$ = this.store.select(selectUserIsLoading);
+  sort$ = this.store.select(selectUserSort);
+  query$ = this.store.select(selectUserQuery);
+  error$ = this.store.select(selectUserError);
+
+  constructor(private store: Store<UserState>) {
     store.dispatch(selectAdapter.select({ selectedItem: [] }));
-    userModel.searchQuery({ test: '123' });
+    this.store.dispatch(userSearch({ query: { test: '123' } }));
   }
 
   userSearch() {
-    this.userModel.searchQuery({ test: '456' });
+    this.store.dispatch(userSearch({ query: { test: '456' } }));
   }
 }

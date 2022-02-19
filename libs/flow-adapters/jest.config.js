@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'search',
+  displayName: 'select',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
@@ -8,7 +8,7 @@ module.exports = {
       stringifyContentPathRegex: '\\.(html|svg)$',
     },
   },
-  coverageDirectory: '../../coverage/libs/search',
+  coverageDirectory: '../../coverage/libs/select',
   transform: {
     '^.+\\.(ts|js|html)$': 'jest-preset-angular',
   },

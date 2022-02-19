@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 
-import { SearchActions, SearchEntity, SearchState } from './models';
+import { SearchActions, SearchState } from './models';
 
 export function createSearchReducer<
   State extends SearchState<Entity>,

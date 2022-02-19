@@ -15,7 +15,7 @@ export type SelectorTypes<State, AdapterName> = {
 export type AdapterConfig<AdapterName, AdapterState> = {
   stateKey: string;
   type: AdapterName;
-  initialState?: AdapterState;
+  initialState?: Partial<AdapterState>;
 };
 
 export type Adapter<Actions, State, AdapterName> = {

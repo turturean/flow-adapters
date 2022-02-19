@@ -45,9 +45,10 @@ export function createSearchAdapter<
 
   return {
     getActions: () => actions,
-    ...capitalizeObjectPropsWithPrefix<
-      ActionTypes<AdapterName, SearchActions<Entity>>
-    >(actions, type),
+    ...capitalizeObjectPropsWithPrefix<ActionTypes<AdapterName, AdapterState>>(
+      actions,
+      type
+    ),
     getSelectors: () => selectors,
     ...selectors,
     getReducer: () => reducer,

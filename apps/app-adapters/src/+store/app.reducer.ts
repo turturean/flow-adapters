@@ -7,8 +7,8 @@ import {
   userAdapter,
   UserState,
 } from './app.adapter';
-import { SearchState } from 'flow-adapters-search';
 import { createReducer, on } from '@ngrx/store';
+import { SearchState } from 'flow-adapters';
 
 import { mergeReducers } from '../tools/tools';
 import { logOut } from './app.actions';

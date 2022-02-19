@@ -1,5 +1,5 @@
-import { createSearchAdapter, SearchState } from 'flow-adapters-search';
 import { createSelectAdapter, SelectState } from 'flow-adapters-select';
+import { createSearchAdapter, SearchState } from 'flow-adapters';
 
 export const USER_STATE_KEY = 'user';
 
@@ -15,6 +15,9 @@ export const userAdapter = createSearchAdapter({
   stateKey: USER_STATE_KEY,
   type: 'user',
   primaryKey: 'uniqId',
+  initialState: {
+    sort: null,
+  },
 });
 
 export const selectAdapter = createSelectAdapter<string>({

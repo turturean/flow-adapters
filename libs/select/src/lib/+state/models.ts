@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 import { MemoizedSelector } from '@ngrx/store/src/selector';
 import { SelectStateAdapter } from './actions';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
@@ -25,10 +24,4 @@ export type SelectState<T = string, K = string> = {
 
 export type SelectSelectors<T, S> = {
   selectItems: MemoizedSelector<S, T[]>;
-};
-
-export type SelectModelInterface<T> = {
-  items$: Observable<T[]>;
-  select(selectItems: T[]): void;
-  select(selectItems: T): void;
 };

@@ -2,8 +2,8 @@ import { createSearchActions } from './actions';
 import { createSearchReducer } from './reducer';
 import { createSearchSelectors } from './selectors';
 import { SearchActions, SearchState } from './models';
-import { ActionTypes, Adapter, AdapterConfig, SelectorTypes } from './types';
 import { capitalizeObjectPropsWithPrefix } from '../tools/tools';
+import { ActionTypes, Adapter, AdapterConfig, SelectorTypes } from './../types';
 
 export type SearchAdapterOptions<AdapterName, AdapterState> = AdapterConfig<
   AdapterName,

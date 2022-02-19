@@ -1,6 +1,6 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { SelectorTypes } from './types';
+import { SelectorTypes } from './../types';
 import { capitalize } from '../tools/tools';
 import { SearchState } from './models';
 

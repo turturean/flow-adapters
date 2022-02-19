@@ -1,4 +1,5 @@
 import { ActionCreator, TypedAction } from '@ngrx/store/src/models';
+import { AdapterConfig } from '../types';
 
 export type SearchEntity = {
   [key: string]: any;
@@ -62,4 +63,11 @@ export type SearchState<Entity> = SearchPagination & {
   query: SearchQuery;
   sort: SearchSort | null;
   total: number;
+};
+
+export type SearchAdapterOptions<AdapterName, AdapterState> = AdapterConfig<
+  AdapterName,
+  AdapterState
+> & {
+  primaryKey?: string;
 };

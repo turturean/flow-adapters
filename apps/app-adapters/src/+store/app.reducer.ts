@@ -28,7 +28,7 @@ export interface AppState {
 }
 
 const userReducer = mergeReducers<UserState>([
-  selectAdapter.reducer,
+  selectAdapter.getReducer(),
   userAdapter.getReducer(),
   appReducer,
 ]);

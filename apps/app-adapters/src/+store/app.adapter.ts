@@ -1,5 +1,9 @@
-import { createSelectAdapter, SelectState } from 'flow-adapters-select';
-import { createSearchAdapter, SearchState } from 'flow-adapters';
+import {
+  createSearchAdapter,
+  createSelectAdapter,
+  SearchState,
+  SelectState,
+} from 'flow-adapters';
 
 export const USER_STATE_KEY = 'user';
 
@@ -9,7 +13,7 @@ export interface User {
   firstName: string;
   lastName: string;
 }
-export type UserState = SearchState<User> & SelectState<string, string>;
+export type UserState = SearchState<User> & SelectState;
 
 export const userAdapter = createSearchAdapter({
   stateKey: USER_STATE_KEY,
@@ -20,10 +24,9 @@ export const userAdapter = createSearchAdapter({
   },
 });
 
-export const selectAdapter = createSelectAdapter<string>({
+export const selectAdapter = createSelectAdapter({
   stateKey: USER_STATE_KEY,
   type: 'user',
-  selectedItems: 'selectedUsers',
 });
 
 export const PRODUCT_STATE_KEY = 'product';

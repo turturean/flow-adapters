@@ -1,16 +1,9 @@
 import { createSearchActions } from './actions';
 import { createSearchReducer } from './reducer';
 import { createSearchSelectors } from './selectors';
-import { SearchActions, SearchState } from './models';
+import { SearchActions, SearchAdapterOptions, SearchState } from './models';
 import { capitalizeObjectPropsWithPrefix } from '../tools/tools';
-import { ActionTypes, Adapter, AdapterConfig, SelectorTypes } from './../types';
-
-export type SearchAdapterOptions<AdapterName, AdapterState> = AdapterConfig<
-  AdapterName,
-  AdapterState
-> & {
-  primaryKey?: string;
-};
+import { ActionTypes, Adapter, SelectorTypes } from './../types';
 
 export function createSearchAdapter<
   Entity extends { [key: string]: any },

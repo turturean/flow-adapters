@@ -28,4 +28,9 @@
   {{ error$ | async | json }}
 </pre>
 
+Selected Items
+<pre>
+  {{ selected$ | async | json }}
+</pre>
+
 <button (click)="$event.stopPropagation(); userSearch()">Search</button>

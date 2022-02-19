@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { selectAdapter, UserState } from '../+store/app.adapter';
-import { userSearch } from '../+store/app.actions';
+import { UserState } from '../+store/app.adapter';
+import { userSearch, userSelectItems } from '../+store/app.actions';
 import {
   getUsers,
   selectUserError,
   selectUserIds,
   selectUserIsLoading,
   selectUserQuery,
+  selectUserSelectedItems,
   selectUserSort,
 } from '../+store/app.selectors';
 
@@ -26,13 +27,17 @@ export class AppComponent {
   sort$ = this.store.select(selectUserSort);
   query$ = this.store.select(selectUserQuery);
   error$ = this.store.select(selectUserError);
+  selected$ = this.store.select(selectUserSelectedItems);
 
   constructor(private store: Store<UserState>) {
-    store.dispatch(selectAdapter.select({ selectedItem: [] }));
+    this.store.dispatch(userSelectItems({ selectedItem: ['12', '23'] }));
     this.store.dispatch(userSearch({ query: { test: '123' } }));
   }
 
   userSearch() {
     this.store.dispatch(userSearch({ query: { test: '456' } }));
+    this.store.dispatch(
+      userSelectItems({ selectedItem: [String(Math.random()), '23'] })
+    );
   }
 }

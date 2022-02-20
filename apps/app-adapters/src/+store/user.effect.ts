@@ -22,7 +22,6 @@ export class UserEffect {
                 },
               })
             : userSearchSuccess({
-                pagination: { perPage: 30, page: 1, total: 1 },
                 entities: [
                   {
                     id: '23',

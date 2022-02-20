@@ -5,11 +5,6 @@ export type SearchEntity = {
   [key: string]: any;
 };
 
-export type SearchPagination = {
-  page: number;
-  perPage: number;
-};
-
 export type SearchQuery = {
   [key: string]: unknown;
 };
@@ -26,11 +21,10 @@ export type SearchError = {
 export interface PropsSearch {
   sort?: SearchSort;
   query?: SearchQuery;
-  pagination?: SearchPagination;
 }
+
 export interface PropsSearchSuccess<T> {
   entities: T[];
-  pagination: SearchPagination & { total: number };
 }
 
 export interface PropsSearchFailed {
@@ -54,7 +48,7 @@ export type SearchActions<T> = {
   >;
 };
 
-export type SearchState<Entity> = SearchPagination & {
+export type SearchState<Entity> = {
   ids: string[];
   entities: { [key: string]: Entity };
   primaryKey: string;
@@ -62,7 +56,6 @@ export type SearchState<Entity> = SearchPagination & {
   error: SearchError | null;
   query: SearchQuery;
   sort: SearchSort | null;
-  total: number;
 };
 
 export type SearchAdapterOptions<AdapterName, AdapterState> = AdapterConfig<

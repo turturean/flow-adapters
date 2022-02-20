@@ -1,23 +1,30 @@
-import { createSearchActions } from './actions';
-import { createSearchReducer } from './reducer';
-import { createSearchSelectors } from './selectors';
-import { SearchActions, SearchAdapterOptions, SearchState } from './models';
+import { createSearchWithPaginationActions } from './actions';
+import { createSearchWithPaginationReducer } from './reducer';
+import { createSearchWithPaginationSelectors } from './selectors';
+import {
+  SearchActions,
+  SearchWithPaginationAdapterOptions,
+  SearchWithPaginationState,
+} from './models';
 import { capitalizeObjectPropsWithPrefix } from '../tools/tools';
-import { ActionTypes, Adapter, SelectorTypes } from '../types';
+import { ActionTypes, Adapter, SelectorTypes } from './../types';
 
-export function createSearchAdapter<
+export function createSearchWithPaginationAdapter<
   Entity extends { [key: string]: any },
   AdapterName extends string = string,
-  AdapterState extends SearchState<Entity> = SearchState<Entity>
+  AdapterState extends SearchWithPaginationState<Entity> = SearchWithPaginationState<Entity>
 >(
-  options: SearchAdapterOptions<AdapterName, AdapterState>
+  options: SearchWithPaginationAdapterOptions<AdapterName, AdapterState>
 ): ActionTypes<AdapterName, SearchActions<Entity>> &
   SelectorTypes<AdapterState, AdapterName> &
   Adapter<SearchActions<Entity>, AdapterState, AdapterName> {
   const { type, stateKey, primaryKey = 'id' } = options;
   // @ts-ignore
   const initialState: AdapterState = {
+    perPage: 10,
+    page: 1,
     isLoading: false,
+    total: 0,
     query: {},
     error: null,
     ids: [],
@@ -26,12 +33,16 @@ export function createSearchAdapter<
     sort: null,
     ...options.initialState,
   };
-  const actions = createSearchActions<Entity>(type);
-  const reducer = createSearchReducer<AdapterState, Entity>(
+  const actions = createSearchWithPaginationActions<Entity>(type);
+  const reducer = createSearchWithPaginationReducer<AdapterState, Entity>(
     initialState,
     actions
   );
-  const selectors = createSearchSelectors(stateKey, initialState, type);
+  const selectors = createSearchWithPaginationSelectors(
+    stateKey,
+    initialState,
+    type
+  );
 
   return {
     getActions: () => actions,

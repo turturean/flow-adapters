@@ -4,6 +4,7 @@ import {
   SearchState,
   SelectState,
 } from 'flow-adapters';
+import { createSearchWithPaginationAdapter } from '../../../../libs/flow-adapters/src/lib/search-with-pagination/adapter';
 
 export const USER_STATE_KEY = 'user';
 
@@ -34,7 +35,7 @@ export type Product = {
   id: string;
   uniqId: string;
 };
-export const productAdapter = createSearchAdapter({
+export const productAdapter = createSearchWithPaginationAdapter({
   stateKey: PRODUCT_STATE_KEY,
   type: 'products',
   primaryKey: 'id',

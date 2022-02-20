@@ -2,10 +2,10 @@ import { createReducer, on } from '@ngrx/store';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 import { SelectActions, SelectState } from './models';
 
-export function createSelectReducer<S extends SelectState>(
-  initialState: S,
+export function createSelectReducer<State extends SelectState>(
+  initialState: State,
   actions: SelectActions
-): ActionReducer<S, Action> {
+): ActionReducer<State, Action> {
   return createReducer(
     initialState,
     on(actions.selectItems, (state, { selectedItem }) => {

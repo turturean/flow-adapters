@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
 import { Action, ActionReducer } from '@ngrx/store/src/models';
 
-import { SearchActions, SearchState } from './models';
+import { SearchActions, SearchWithPaginationState } from './models';
 
-export function createSearchReducer<
-  State extends SearchState<Entity>,
+export function createSearchWithPaginationReducer<
+  State extends SearchWithPaginationState<Entity>,
   Entity = { [key: string]: any }
 >(
   initialState: State,
@@ -12,21 +12,30 @@ export function createSearchReducer<
 ): ActionReducer<State, Action> {
   return createReducer(
     initialState,
-    on(actions.search, (state, { query, sort }) => {
-      const newState: Partial<SearchState<Entity>> = {
+    on(actions.search, (state, { query, pagination, sort }) => {
+      const newState: Partial<SearchWithPaginationState<Entity>> = {
         isLoading: true,
         entities: {},
         ids: [],
         error: null,
       };
 
+      if (pagination) {
+        newState.page = pagination.page;
+        newState.perPage = pagination.perPage;
+      }
+
       if (query) {
         newState.query = query;
+        newState.page = initialState.page;
+        newState.perPage = initialState.perPage;
+        newState.total = 0;
         newState.error = null;
       }
 
-      if (!query && sort) {
+      if (!query && !pagination && sort) {
         newState.sort = sort;
+        newState.page = 1;
       }
 
       return {
@@ -34,7 +43,7 @@ export function createSearchReducer<
         ...newState,
       };
     }),
-    on(actions.searchSuccess, (state, { entities }) => {
+    on(actions.searchSuccess, (state, { entities, pagination }) => {
       const primaryKey = state.primaryKey as keyof Entity;
       const ids = entities.map<string>((entity) => String(entity[primaryKey]));
       const newEntities = entities.reduce<{ [key: string]: Entity }>(
@@ -48,6 +57,8 @@ export function createSearchReducer<
       return {
         ...state,
         isLoading: false,
+        page: pagination.page,
+        perPage: pagination.perPage,
         ids: ids,
         entities: newEntities,
       };

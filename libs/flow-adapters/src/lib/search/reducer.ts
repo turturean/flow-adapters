@@ -1,33 +1,56 @@
 import { createReducer, on } from '@ngrx/store';
-import { Action, ActionReducer } from '@ngrx/store/src/models';
+import { Action, ActionReducer, TypedAction } from '@ngrx/store/src/models';
 
-import { SearchActions, SearchState } from './models';
+import {
+  PropsSearch,
+  SearchActions,
+  SearchConfig,
+  SearchPaginationState,
+  SearchQueryState,
+  SearchState,
+} from './models';
 
-export function createSearchReducer<
-  State extends SearchState<Entity>,
-  Entity = { [key: string]: any }
->(
-  initialState: State,
-  actions: SearchActions<Entity>
-): ActionReducer<State, Action> {
+function searchQueryReducer(
+  state: SearchQueryState<true>,
+  { query }: PropsSearch<false, true> & TypedAction<string>
+): SearchQueryState<true> {
+  return state;
+}
+
+export function createSearchReducer<Entity, HasPagination, HasQuery>(
+  initialState: SearchState<Entity> &
+    SearchPaginationState<HasPagination> &
+    SearchQueryState<HasQuery>,
+  actions: SearchActions<Entity, HasPagination, HasQuery>,
+  options: SearchConfig<HasPagination, HasQuery>
+): ActionReducer<
+  SearchState<Entity> &
+    SearchPaginationState<HasPagination> &
+    SearchQueryState<HasQuery>,
+  Action
+> {
+  type State = SearchState<Entity> &
+    SearchPaginationState<HasPagination> &
+    SearchQueryState<HasQuery>;
+
   return createReducer(
     initialState,
-    on(actions.search, (state, { query, sort }) => {
-      const newState: Partial<SearchState<Entity>> = {
-        isLoading: true,
-        entities: {},
-        ids: [],
-        error: null,
+    on(actions.search, (state, action) => {
+      let newState: Partial<State> = {
+        primaryKey: '',
+        // isLoading: true,
+        // entities: {},
+        // ids: [],
+        // error: null,
       };
 
-      if (query) {
-        newState.query = query;
-        newState.error = null;
+      if (options.hasQuery && action) {
+        // newState = {...newState, ...searchQueryReducer(state, action)};
       }
 
-      if (!query && sort) {
-        newState.sort = sort;
-      }
+      // if (!action && sort) {
+      //   newState.sort = action.;
+      // }
 
       return {
         ...state,

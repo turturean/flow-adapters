@@ -1,12 +1,46 @@
 import { ActionCreator, TypedAction } from '@ngrx/store/src/models';
 import { AdapterConfig } from '../types';
 
-export type SearchEntity = {
-  [key: string]: any;
+type EmptyObject = { [key: string]: any };
+
+type QueryArgs = {
+  query?: EmptyObject;
+};
+type PaginationArgs = {
+  pagination: {
+    page: number;
+    perPage: number;
+    total: number;
+  };
+};
+type SearchQueryArgs<HasQuery> = HasQuery extends true ? QueryArgs : unknown;
+type SearchPaginationArgs<HasPagination> = HasPagination extends true
+  ? PaginationArgs
+  : unknown;
+
+type QueryState = {
+  query: EmptyObject;
+};
+type PaginationState = {
+  page: number;
+  perPage: number;
+  total: number;
 };
 
-export type SearchQuery = {
-  [key: string]: unknown;
+export type SearchQueryState<isQuery> = isQuery extends true
+  ? QueryState
+  : unknown;
+export type SearchPaginationState<isPagination> = isPagination extends true
+  ? PaginationState
+  : unknown;
+
+export type SearchState<Entity> = {
+  ids: string[];
+  entities: { [key: string]: Entity };
+  primaryKey: string;
+  isLoading: boolean;
+  error: Error | null;
+  sort: SearchSort | null;
 };
 
 export type SearchSort = {
@@ -14,53 +48,41 @@ export type SearchSort = {
   sortDir: string;
 };
 
-export type SearchError = {
-  [key: string]: unknown;
-};
+export type PropsSearch<HasPagination, HasQuery> = SearchQueryArgs<HasQuery> &
+  SearchPaginationArgs<HasPagination>;
 
-export interface PropsSearch {
-  sort?: SearchSort;
-  query?: SearchQuery;
-}
-
-export interface PropsSearchSuccess<T> {
-  entities: T[];
-}
+export type PropsSearchSuccess<Entity, HasPagination> = {
+  entities: Entity[];
+} & SearchPaginationArgs<HasPagination>;
 
 export interface PropsSearchFailed {
-  error: SearchError | null;
+  error: Error | null;
 }
 
-export type SearchActions<T> = {
+export type SearchActions<Entity, HasPagination, HasQuery> = {
   search: ActionCreator<
     string,
-    (props: PropsSearch) => PropsSearch & TypedAction<string>
+    (
+      props?: PropsSearch<HasPagination, HasQuery>
+    ) => PropsSearch<HasPagination, HasQuery> & TypedAction<string>
   >;
   searchSuccess: ActionCreator<
     string,
     (
-      props: PropsSearchSuccess<T>
-    ) => PropsSearchSuccess<T> & TypedAction<string>
+      props: PropsSearchSuccess<Entity, HasPagination>
+    ) => PropsSearchSuccess<Entity, HasPagination> & TypedAction<string>
   >;
   searchFailed: ActionCreator<
     string,
-    (props: PropsSearchFailed) => PropsSearchFailed & TypedAction<string>
+    (props?: PropsSearchFailed) => PropsSearchFailed & TypedAction<string>
   >;
 };
 
-export type SearchState<Entity> = {
-  ids: string[];
-  entities: { [key: string]: Entity };
-  primaryKey: string;
-  isLoading: boolean;
-  error: SearchError | null;
-  query: SearchQuery;
-  sort: SearchSort | null;
+export type SearchConfig<HasPagination, HasQuery> = {
+  primaryKey?: string;
+  hasPagination?: HasPagination;
+  hasQuery?: HasQuery;
 };
 
-export type SearchAdapterOptions<AdapterName, AdapterState> = AdapterConfig<
-  AdapterName,
-  AdapterState
-> & {
-  primaryKey?: string;
-};
+export type SearchAdapterOptions<AdapterName, AdapterState, SearchConfig> =
+  AdapterConfig<AdapterName, AdapterState> & SearchConfig;

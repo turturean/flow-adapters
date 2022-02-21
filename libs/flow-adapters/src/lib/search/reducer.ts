@@ -27,14 +27,15 @@ export function createSearchReducer<
   return createReducer(
     initialState,
     on(actions.search, (state, action) => {
-      const newState: Partial<any> = {
+      let newState: Partial<any> = {
         isLoading: true,
       };
 
       if (options.hasPagination) {
         const { pagination } = action as PaginationArgs & TypedAction<string>;
-        newState.page = pagination.page;
-        newState.perPage = pagination.perPage;
+        newState = {
+          ...(pagination ? pagination : null),
+        };
       }
 
       if (options.hasPagination && options.hasQuery) {
@@ -46,7 +47,20 @@ export function createSearchReducer<
 
       if (options.hasQuery) {
         const { query } = action as QueryArgs & TypedAction<string>;
-        newState.query = query;
+        newState = {
+          ...newState,
+          ...(query ? { query: query } : null),
+        };
+      }
+
+      if (options.hasQuery && options.hasPagination) {
+        const { query, pagination } = action as QueryArgs &
+          PaginationArgs &
+          TypedAction<string>;
+        newState = {
+          ...newState,
+          ...(query ? { query: query, ...pagination } : null),
+        };
       }
 
       newState.error = null;

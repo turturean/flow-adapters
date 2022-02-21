@@ -33,7 +33,7 @@ export class AppComponent {
   }
 
   userSearch() {
-    this.store.dispatch(userSearch({ query: { test: 34 } }));
+    this.store.dispatch(userSearch({}));
     this.store.dispatch(
       userSelectItems({ selectedItem: [String(Math.random()), '23'] })
     );

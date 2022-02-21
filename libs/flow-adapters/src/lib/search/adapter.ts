@@ -70,13 +70,13 @@ export function createSearchAdapter<
   >(initialState, actions, options);
 
   return {
-    ...selectors,
     getSelectors: () => selectors,
-    ...capitalizeObjectPropsWithPrefix<
-      ActionTypes<AdapterName, SearchActions<Entity, HasPagination, HasQuery>>
-    >(actions, type),
     getActions: () => actions,
     getReducer: () => reducer,
     getInitialState: () => initialState,
+    ...selectors,
+    ...capitalizeObjectPropsWithPrefix<
+      ActionTypes<AdapterName, SearchActions<Entity, HasPagination, HasQuery>>
+    >(actions, type),
   };
 }

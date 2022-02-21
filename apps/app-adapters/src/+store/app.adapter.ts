@@ -13,6 +13,7 @@ export interface User {
   firstName: string;
   lastName: string;
 }
+
 export type UserState = SearchEntitiesState<User> & SelectState;
 
 export const userAdapter = createSearchAdapter({
@@ -20,11 +21,9 @@ export const userAdapter = createSearchAdapter({
   type: 'user',
   primaryKey: 'uniqId',
   initialState: {},
-  hasPagination: false,
+  hasPagination: true,
   hasQuery: true,
 });
-
-// userAdapter.
 
 export const selectAdapter = createSelectAdapter({
   stateKey: USER_STATE_KEY,

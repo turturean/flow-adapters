@@ -5,15 +5,18 @@ export interface QueryArgs {
   query?: { [key: string]: any };
 }
 export interface PaginationArgs {
-  pagination: {
+  pagination?: {
     page: number;
     perPage: number;
-    total: number;
   };
 }
 type SearchQueryArgs<HasQuery> = HasQuery extends true ? QueryArgs : unknown;
 type SearchPaginationArgs<HasPagination> = HasPagination extends true
   ? PaginationArgs
+  : unknown;
+
+type SearchSuccessPaginationArgs<HasPagination> = HasPagination extends true
+  ? PaginationArgs & { pagination?: { total: number } }
   : unknown;
 
 export type QueryState = {
@@ -59,7 +62,7 @@ export type PropsSearch<HasPagination, HasQuery> = SearchQueryArgs<HasQuery> &
 
 export type PropsSearchSuccess<Entity, HasPagination> = {
   entities: Entity[];
-} & SearchPaginationArgs<HasPagination>;
+} & SearchSuccessPaginationArgs<HasPagination>;
 
 export interface PropsSearchFailed {
   error: Error | null;

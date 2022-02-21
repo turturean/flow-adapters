@@ -1,10 +1,9 @@
 import {
   createSearchAdapter,
   createSelectAdapter,
-  SearchState,
+  SearchEntitiesState,
   SelectState,
 } from 'flow-adapters';
-import { createSearchWithPaginationAdapter } from '../../../../libs/flow-adapters/src/lib/search-with-pagination/adapter';
 
 export const USER_STATE_KEY = 'user';
 
@@ -14,15 +13,15 @@ export interface User {
   firstName: string;
   lastName: string;
 }
-export type UserState = SearchState<User> & SelectState;
+export type UserState = SearchEntitiesState<User> & SelectState;
 
 export const userAdapter = createSearchAdapter({
   stateKey: USER_STATE_KEY,
   type: 'user',
   primaryKey: 'uniqId',
-  initialState: {
-    sort: null,
-  },
+  initialState: {},
+  hasPagination: false,
+  hasQuery: false,
 });
 
 export const selectAdapter = createSelectAdapter({
@@ -35,7 +34,7 @@ export type Product = {
   id: string;
   uniqId: string;
 };
-export const productAdapter = createSearchWithPaginationAdapter({
+export const productAdapter = createSearchAdapter({
   stateKey: PRODUCT_STATE_KEY,
   type: 'products',
   primaryKey: 'id',

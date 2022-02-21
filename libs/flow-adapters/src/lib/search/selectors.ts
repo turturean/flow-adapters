@@ -1,6 +1,5 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { SelectorTypes } from '../types';
 import { capitalize } from '../tools/tools';
 
 export function createSearchSelectors<State, AdapterName>(
@@ -20,5 +19,5 @@ export function createSearchSelectors<State, AdapterName>(
       ...acc,
       [propKey]: createSelector(selectState, (state) => state && state[key]),
     };
-  }, {} as SelectorTypes<State, AdapterName>);
+  }, {});
 }

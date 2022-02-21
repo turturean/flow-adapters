@@ -8,7 +8,7 @@ import {
   UserState,
 } from './app.adapter';
 import { createReducer, on } from '@ngrx/store';
-import { SearchState } from 'flow-adapters';
+import { SearchEntitiesState } from 'flow-adapters';
 
 import { mergeReducers } from '../tools/tools';
 import { logOut } from './app.actions';
@@ -24,7 +24,7 @@ export const appReducer = createReducer(
 
 export interface AppState {
   [USER_STATE_KEY]: UserState;
-  [PRODUCT_STATE_KEY]: SearchState<Product>;
+  [PRODUCT_STATE_KEY]: SearchEntitiesState<Product>;
 }
 
 const userReducer = mergeReducers<UserState>([

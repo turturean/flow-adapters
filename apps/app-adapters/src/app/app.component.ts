@@ -8,7 +8,6 @@ import {
   selectUserError,
   selectUserIds,
   selectUserIsLoading,
-  selectUserQuery,
   selectUserSelectedItems,
   selectUserSort,
 } from '../+store/app.selectors';
@@ -25,17 +24,16 @@ export class AppComponent {
   ids$ = this.store.select(selectUserIds);
   isLoading$ = this.store.select(selectUserIsLoading);
   sort$ = this.store.select(selectUserSort);
-  query$ = this.store.select(selectUserQuery);
   error$ = this.store.select(selectUserError);
   selected$ = this.store.select(selectUserSelectedItems);
 
   constructor(private store: Store<UserState>) {
     this.store.dispatch(userSelectItems({ selectedItem: ['12', '23'] }));
-    this.store.dispatch(userSearch({ query: { test: '123' } }));
+    this.store.dispatch(userSearch());
   }
 
   userSearch() {
-    this.store.dispatch(userSearch({ query: { test: '456' } }));
+    this.store.dispatch(userSearch({ query: { test: 34 } }));
     this.store.dispatch(
       userSelectItems({ selectedItem: [String(Math.random()), '23'] })
     );

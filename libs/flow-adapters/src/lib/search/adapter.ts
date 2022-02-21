@@ -10,31 +10,26 @@ import {
   SearchState,
 } from './models';
 import { capitalizeObjectPropsWithPrefix } from '../tools/tools';
-import { ActionTypes, SelectorTypes } from '../types';
+import { ActionTypes, Adapter, SelectorTypes } from '../types';
 
 export function createSearchAdapter<
   Entity extends { [key: string]: any },
   HasPagination extends boolean = false,
   HasQuery extends boolean = false,
-  AdapterName extends string = string,
-  AdapterState extends SearchState<Entity> &
-    SearchPaginationState<HasPagination> &
-    SearchQueryState<HasQuery> = SearchState<Entity> &
-    SearchPaginationState<HasPagination> &
-    SearchQueryState<HasQuery>
+  AdapterName extends string = string
 >(
   options: SearchAdapterOptions<
     AdapterName,
-    AdapterState,
+    SearchState<Entity, HasPagination, HasQuery>,
     SearchConfig<HasPagination, HasQuery>
   >
 ): ActionTypes<AdapterName, SearchActions<Entity, HasPagination, HasQuery>> &
-  SelectorTypes<AdapterState, AdapterName> {
-  // Adapter<
-  //   SearchActions<Entity, HasPagination, HasQuery>,
-  //   AdapterState,
-  //   AdapterName
-  // >
+  SelectorTypes<SearchState<Entity, HasPagination, HasQuery>, AdapterName> &
+  Adapter<
+    SearchActions<Entity, HasPagination, HasQuery>,
+    SearchState<Entity, HasPagination, HasQuery>,
+    AdapterName
+  > {
   const {
     type,
     stateKey,
@@ -42,9 +37,7 @@ export function createSearchAdapter<
     hasQuery,
     hasPagination,
   } = options;
-
-  // @ts-ignore
-  const initialState: AdapterState = {
+  const initialState: SearchState<Entity, HasPagination, HasQuery> = {
     isLoading: false,
     error: null,
     ids: [],
@@ -58,30 +51,20 @@ export function createSearchAdapter<
     ...options.initialState,
   };
   const actions = createSearchActions<Entity, HasPagination, HasQuery>(type);
-  // const reducer = createSearchReducer<Entity, HasPagination, HasQuery>(
-  //   initialState,
-  //   actions,
-  //   options
-  // );
   const selectors = createSearchSelectors(stateKey, initialState, type);
+  const reducer = createSearchReducer<Entity, HasPagination, HasQuery>(
+    initialState,
+    actions,
+    options
+  );
 
   return {
-    getActions: () => actions,
-    ...capitalizeObjectPropsWithPrefix<ActionTypes<AdapterName, AdapterState>>(
-      actions,
-      type
-    ),
-    getSelectors: () => selectors,
     ...selectors,
-    // getReducer: () => reducer,
-    // getInitialState: () => initialState,
+    // @ts-ignore
+    getSelectors: () => selectors,
+    ...capitalizeObjectPropsWithPrefix(actions, type),
+    getActions: () => actions,
+    getReducer: () => reducer,
+    getInitialState: () => initialState,
   };
 }
-
-const {} = createSearchAdapter({
-  stateKey: 'user',
-  type: 'users',
-  hasQuery: true,
-  hasPagination: false,
-  initialState: {},
-});

@@ -17,9 +17,7 @@ export class UserEffect {
         return of(
           this.num % 2
             ? userSearchFailed({
-                error: {
-                  message: 'Some api error',
-                },
+                error: new Error('Some api error'),
               })
             : userSearchSuccess({
                 entities: [

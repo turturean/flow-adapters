@@ -1,30 +1,28 @@
 import { ActionCreator, TypedAction } from '@ngrx/store/src/models';
 import { AdapterConfig } from '../types';
 
-type EmptyObject = { [key: string]: any };
-
-type QueryArgs = {
-  query?: EmptyObject;
-};
-type PaginationArgs = {
+export interface QueryArgs {
+  query?: { [key: string]: any };
+}
+export interface PaginationArgs {
   pagination: {
     page: number;
     perPage: number;
     total: number;
   };
-};
+}
 type SearchQueryArgs<HasQuery> = HasQuery extends true ? QueryArgs : unknown;
 type SearchPaginationArgs<HasPagination> = HasPagination extends true
   ? PaginationArgs
   : unknown;
 
-type QueryState = {
-  query: EmptyObject;
+export type QueryState = {
+  query?: { [key: string]: any };
 };
-type PaginationState = {
-  page: number;
-  perPage: number;
-  total: number;
+export type PaginationState = {
+  page?: number;
+  perPage?: number | undefined;
+  total?: number | undefined;
 };
 
 export type SearchQueryState<isQuery> = isQuery extends true
@@ -34,7 +32,7 @@ export type SearchPaginationState<isPagination> = isPagination extends true
   ? PaginationState
   : unknown;
 
-export type SearchState<Entity> = {
+export type SearchEntitiesState<Entity = unknown> = {
   ids: string[];
   entities: { [key: string]: Entity };
   primaryKey: string;
@@ -42,6 +40,14 @@ export type SearchState<Entity> = {
   error: Error | null;
   sort: SearchSort | null;
 };
+
+export type SearchState<
+  Entity = { [key: string]: any },
+  HasPagination = false,
+  HasQuery = false
+> = SearchEntitiesState<Entity> &
+  SearchPaginationState<HasPagination> &
+  SearchQueryState<HasQuery>;
 
 export type SearchSort = {
   sortColumn: string;
@@ -59,7 +65,11 @@ export interface PropsSearchFailed {
   error: Error | null;
 }
 
-export type SearchActions<Entity, HasPagination, HasQuery> = {
+export interface SearchActions<
+  Entity = unknown,
+  HasPagination = false,
+  HasQuery = false
+> {
   search: ActionCreator<
     string,
     (
@@ -76,9 +86,9 @@ export type SearchActions<Entity, HasPagination, HasQuery> = {
     string,
     (props?: PropsSearchFailed) => PropsSearchFailed & TypedAction<string>
   >;
-};
+}
 
-export type SearchConfig<HasPagination, HasQuery> = {
+export type SearchConfig<HasPagination = false, HasQuery = false> = {
   primaryKey?: string;
   hasPagination?: HasPagination;
   hasQuery?: HasQuery;

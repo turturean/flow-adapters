@@ -1,55 +1,58 @@
 import { createReducer, on } from '@ngrx/store';
-import { Action, ActionReducer, TypedAction } from '@ngrx/store/src/models';
-
+import { TypedAction } from '@ngrx/store/src/models';
 import {
-  PropsSearch,
+  PaginationArgs,
+  PaginationState,
+  QueryArgs,
   SearchActions,
+  SearchAdapterOptions,
   SearchConfig,
-  SearchPaginationState,
-  SearchQueryState,
   SearchState,
 } from './models';
 
-function searchQueryReducer(
-  state: SearchQueryState<true>,
-  { query }: PropsSearch<false, true> & TypedAction<string>
-): SearchQueryState<true> {
-  return state;
-}
-
-export function createSearchReducer<Entity, HasPagination, HasQuery>(
-  initialState: SearchState<Entity> &
-    SearchPaginationState<HasPagination> &
-    SearchQueryState<HasQuery>,
+export function createSearchReducer<
+  Entity,
+  HasPagination,
+  HasQuery,
+  AdapterName = string
+>(
+  initialState: SearchState<Entity, HasPagination, HasQuery>,
   actions: SearchActions<Entity, HasPagination, HasQuery>,
-  options: SearchConfig<HasPagination, HasQuery>
-): ActionReducer<
-  SearchState<Entity> &
-    SearchPaginationState<HasPagination> &
-    SearchQueryState<HasQuery>,
-  Action
-> {
-  type State = SearchState<Entity> &
-    SearchPaginationState<HasPagination> &
-    SearchQueryState<HasQuery>;
-
+  options: SearchAdapterOptions<
+    AdapterName,
+    SearchState<Entity, HasPagination, HasQuery>,
+    SearchConfig<HasPagination, HasQuery>
+  >
+) {
   return createReducer(
     initialState,
     on(actions.search, (state, action) => {
-      let newState: Partial<State> = {
-        primaryKey: '',
-        // isLoading: true,
-        // entities: {},
-        // ids: [],
-        // error: null,
+      const newState: Partial<any> = {
+        isLoading: true,
       };
 
-      if (options.hasQuery && action) {
-        // newState = {...newState, ...searchQueryReducer(state, action)};
+      if (options.hasPagination) {
+        const { pagination } = action as PaginationArgs & TypedAction<string>;
+        newState.page = pagination.page;
+        newState.perPage = pagination.perPage;
       }
 
-      // if (!action && sort) {
-      //   newState.sort = action.;
+      if (options.hasPagination && options.hasQuery) {
+        const { page, perPage } = initialState as PaginationState;
+        newState.page = page;
+        newState.perPage = perPage;
+        newState.total = 0;
+      }
+
+      if (options.hasQuery) {
+        const { query } = action as QueryArgs & TypedAction<string>;
+        newState.query = query;
+      }
+
+      newState.error = null;
+      // if (!query && !pagination && action.sort) {
+      //   newState.sort = sort;
+      //   newState.page = 1;
       // }
 
       return {
@@ -58,10 +61,12 @@ export function createSearchReducer<Entity, HasPagination, HasQuery>(
       };
     }),
     on(actions.searchSuccess, (state, { entities }) => {
-      const primaryKey = state.primaryKey as keyof Entity;
-      const ids = entities.map<string>((entity) => String(entity[primaryKey]));
-      const newEntities = entities.reduce<{ [key: string]: Entity }>(
-        (accumulator, entity) => ({
+      const primaryKey = state.primaryKey;
+      const ids = entities.map<string>((entity: { [key: string]: any }) =>
+        String(entity[primaryKey])
+      );
+      const newEntities = entities.reduce(
+        (accumulator, entity: { [key: string]: any }) => ({
           ...accumulator,
           [String(entity[primaryKey])]: entity,
         }),

@@ -7,7 +7,6 @@ export const {
   selectUserIds,
   selectUserIsLoading,
   selectUserSort,
-  selectUserQuery,
   selectUserError,
 } = userAdapter;
 export const { selectUserSelectedItems } = selectAdapter;

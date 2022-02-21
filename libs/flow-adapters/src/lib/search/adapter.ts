@@ -14,9 +14,9 @@ import { ActionTypes, Adapter, SelectorTypes } from '../types';
 
 export function createSearchAdapter<
   Entity extends { [key: string]: any },
-  HasPagination extends boolean = false,
-  HasQuery extends boolean = false,
-  AdapterName extends string = string
+  HasPagination extends boolean,
+  HasQuery extends boolean,
+  AdapterName extends string
 >(
   options: SearchAdapterOptions<
     AdapterName,
@@ -50,19 +50,31 @@ export function createSearchAdapter<
       : null),
     ...options.initialState,
   };
-  const actions = createSearchActions<Entity, HasPagination, HasQuery>(type);
-  const selectors = createSearchSelectors(stateKey, initialState, type);
-  const reducer = createSearchReducer<Entity, HasPagination, HasQuery>(
-    initialState,
-    actions,
-    options
-  );
+  const actions = createSearchActions<
+    Entity,
+    HasPagination,
+    HasQuery,
+    AdapterName
+  >(type);
+  const selectors = createSearchSelectors<
+    Entity,
+    HasPagination,
+    HasQuery,
+    AdapterName
+  >(stateKey, initialState, type);
+  const reducer = createSearchReducer<
+    Entity,
+    HasPagination,
+    HasQuery,
+    AdapterName
+  >(initialState, actions, options);
 
   return {
     ...selectors,
-    // @ts-ignore
     getSelectors: () => selectors,
-    ...capitalizeObjectPropsWithPrefix(actions, type),
+    ...capitalizeObjectPropsWithPrefix<
+      ActionTypes<AdapterName, SearchActions<Entity, HasPagination, HasQuery>>
+    >(actions, type),
     getActions: () => actions,
     getReducer: () => reducer,
     getInitialState: () => initialState,

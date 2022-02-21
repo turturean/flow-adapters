@@ -1,3 +1,5 @@
+import { ActionTypes, SearchActions } from 'flow-adapters';
+
 export function pluralize(word: string): string {
   return `${capitalize(word) + 's'}`;
 }

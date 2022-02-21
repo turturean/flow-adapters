@@ -14,7 +14,7 @@ export function createSearchReducer<
   Entity,
   HasPagination,
   HasQuery,
-  AdapterName = string
+  AdapterName
 >(
   initialState: SearchState<Entity, HasPagination, HasQuery>,
   actions: SearchActions<Entity, HasPagination, HasQuery>,

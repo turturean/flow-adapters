@@ -10,9 +10,10 @@ import {
 export function createSearchActions<
   Entity = unknown,
   HasPagination extends boolean = false,
-  HasQuery extends boolean = false
->(type: string) {
-  const entityType = capitalize(type);
+  HasQuery extends boolean = false,
+  AdapterName = string
+>(type: AdapterName) {
+  const entityType = capitalize(String(type));
 
   return {
     search: createAction(

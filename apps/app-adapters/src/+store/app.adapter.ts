@@ -21,8 +21,10 @@ export const userAdapter = createSearchAdapter({
   primaryKey: 'uniqId',
   initialState: {},
   hasPagination: false,
-  hasQuery: false,
+  hasQuery: true,
 });
+
+// userAdapter.
 
 export const selectAdapter = createSelectAdapter({
   stateKey: USER_STATE_KEY,

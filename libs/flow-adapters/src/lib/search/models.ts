@@ -10,14 +10,6 @@ export interface PaginationArgs {
     perPage: number;
   };
 }
-type SearchQueryArgs<HasQuery> = HasQuery extends true ? QueryArgs : unknown;
-type SearchPaginationArgs<HasPagination> = HasPagination extends true
-  ? PaginationArgs
-  : unknown;
-
-type SearchSuccessPaginationArgs<HasPagination> = HasPagination extends true
-  ? PaginationArgs & { pagination?: { total: number } }
-  : unknown;
 
 export type QueryState = {
   query?: { [key: string]: any };
@@ -57,37 +49,30 @@ export type SearchSort = {
   sortDir: string;
 };
 
-export type PropsSearch<HasPagination, HasQuery> = SearchQueryArgs<HasQuery> &
-  SearchPaginationArgs<HasPagination>;
+export type PropsSearch = QueryArgs & PaginationArgs;
 
-export type PropsSearchSuccess<Entity, HasPagination> = {
+export type PropsSearchSuccess<Entity> = {
   entities: Entity[];
-} & SearchSuccessPaginationArgs<HasPagination>;
+} & PaginationArgs & { pagination?: { total: number } };
 
 export interface PropsSearchFailed {
   error: Error | null;
 }
 
-export interface SearchActions<
-  Entity = unknown,
-  HasPagination = false,
-  HasQuery = false
-> {
+export interface SearchActions<Entity = unknown> {
   search: ActionCreator<
     string,
-    (
-      props?: PropsSearch<HasPagination, HasQuery>
-    ) => PropsSearch<HasPagination, HasQuery> & TypedAction<string>
+    (props: PropsSearch) => PropsSearch & TypedAction<string>
   >;
   searchSuccess: ActionCreator<
     string,
     (
-      props: PropsSearchSuccess<Entity, HasPagination>
-    ) => PropsSearchSuccess<Entity, HasPagination> & TypedAction<string>
+      props: PropsSearchSuccess<Entity>
+    ) => PropsSearchSuccess<Entity> & TypedAction<string>
   >;
   searchFailed: ActionCreator<
     string,
-    (props?: PropsSearchFailed) => PropsSearchFailed & TypedAction<string>
+    (props: PropsSearchFailed) => PropsSearchFailed & TypedAction<string>
   >;
 }
 

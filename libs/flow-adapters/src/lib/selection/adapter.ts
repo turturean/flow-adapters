@@ -1,24 +1,17 @@
-import {
-  ActionTypes,
-  Adapter,
-  SelectActions,
-  SelectorTypes,
-} from 'flow-adapters';
 import { createSelectActions } from './actions';
 import { createSelectReducer } from './reducer';
 import { createSelectSelectors } from './selectors';
-import { SelectedOption, SelectState } from './models';
-import { capitalizeObjectPropsWithPrefix } from '../tools/tools';
+import { SelectActions, SelectedOption, SelectState } from './models';
+import { FlowAdapter } from '../types';
 
 export function createSelectAdapter<
   AdapterName extends string = string,
   AdapterState extends SelectState = SelectState
 >(
   options: SelectedOption<AdapterName, AdapterState>
-): ActionTypes<AdapterName, SelectActions> &
-  SelectorTypes<AdapterState, AdapterName> &
-  Adapter<SelectActions, AdapterState, AdapterName> {
+): FlowAdapter<SelectActions, AdapterState> {
   const { type, stateKey } = options;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const initialState: AdapterState = {
     selectedItems: [],
@@ -26,17 +19,12 @@ export function createSelectAdapter<
   };
   const actions = createSelectActions(type);
   const reducer = createSelectReducer<AdapterState>(initialState, actions);
-  const selectors = createSelectSelectors(stateKey, initialState, type);
+  const selectors = createSelectSelectors(stateKey, initialState);
 
   return {
     getActions: () => actions,
     getReducer: () => reducer,
     getInitialState: () => initialState,
     getSelectors: () => selectors,
-    ...selectors,
-    ...capitalizeObjectPropsWithPrefix<ActionTypes<AdapterName, AdapterState>>(
-      actions,
-      type
-    ),
   };
 }

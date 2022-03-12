@@ -1,5 +1,5 @@
 import { ActionCreator, TypedAction } from '@ngrx/store/src/models';
-import { AdapterConfig } from 'flow-adapters';
+import { AdapterConfig } from '../types';
 
 export type SelectedOption<AdapterName, AdapterState> = AdapterConfig<
   AdapterName,

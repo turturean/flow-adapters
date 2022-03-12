@@ -9,8 +9,7 @@ import {
   SearchQueryState,
   SearchState,
 } from './models';
-import { capitalizeObjectPropsWithPrefix } from '../tools/tools';
-import { ActionTypes, Adapter, SelectorTypes } from '../types';
+import { FlowAdapter } from '../types';
 
 export function createSearchAdapter<
   Entity extends { [key: string]: any },
@@ -23,13 +22,10 @@ export function createSearchAdapter<
     SearchState<Entity, HasPagination, HasQuery>,
     SearchConfig<HasPagination, HasQuery>
   >
-): ActionTypes<AdapterName, SearchActions<Entity, HasPagination, HasQuery>> &
-  SelectorTypes<SearchState<Entity, HasPagination, HasQuery>, AdapterName> &
-  Adapter<
-    SearchActions<Entity, HasPagination, HasQuery>,
-    SearchState<Entity, HasPagination, HasQuery>,
-    AdapterName
-  > {
+): FlowAdapter<
+  SearchActions<Entity>,
+  SearchState<Entity, HasPagination, HasQuery>
+> {
   const {
     type,
     stateKey,
@@ -50,23 +46,16 @@ export function createSearchAdapter<
       : null),
     ...options.initialState,
   };
-  const actions = createSearchActions<
-    Entity,
-    HasPagination,
-    HasQuery,
-    AdapterName
-  >(type);
-  const selectors = createSearchSelectors<
-    Entity,
-    HasPagination,
-    HasQuery,
-    AdapterName
-  >(stateKey, initialState, type);
+  const actions = createSearchActions<Entity, AdapterName>(type);
+  const selectors = createSearchSelectors<Entity, HasPagination, HasQuery>(
+    stateKey,
+    initialState
+  );
   const reducer = createSearchReducer<
     Entity,
+    AdapterName,
     HasPagination,
-    HasQuery,
-    AdapterName
+    HasQuery
   >(initialState, actions, options);
 
   return {
@@ -74,9 +63,5 @@ export function createSearchAdapter<
     getActions: () => actions,
     getReducer: () => reducer,
     getInitialState: () => initialState,
-    ...selectors,
-    ...capitalizeObjectPropsWithPrefix<
-      ActionTypes<AdapterName, SearchActions<Entity, HasPagination, HasQuery>>
-    >(actions, type),
   };
 }

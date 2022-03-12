@@ -1,19 +1,13 @@
 import { createAction, createSelector } from '@ngrx/store';
-import { selectAdapter, userAdapter } from './app.adapter';
+import { userSelectAdapter, userSearchAdapter } from './app.adapter';
 
 export const logOut = createAction('[APP] Logout');
-export const {
-  selectUserEntities,
-  selectUserIds,
-  selectUserIsLoading,
-  selectUserSort,
-  selectUserError,
-} = userAdapter;
-export const { selectUserSelectedItems } = selectAdapter;
+export const userSearchSelectors = userSearchAdapter.getSelectors();
+export const userSelectSelectors = userSelectAdapter.getSelectors();
 
 export const getUsers = createSelector(
-  selectUserIds,
-  selectUserEntities,
+  userSearchSelectors.ids,
+  userSearchSelectors.entities,
   (ids, entities) => {
     return ids.map((id) => entities[id]);
   }

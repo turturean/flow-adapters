@@ -12,15 +12,22 @@ export type SelectorTypes<State, AdapterName> = {
   >}${Capitalize<key>}`]: MemoizedSelector<State, State[key]>;
 };
 
+export type FlowSelectorTypes<State> = {
+  [key in keyof State & string as `${key}`]: MemoizedSelector<
+    State,
+    State[key]
+  >;
+};
+
 export type AdapterConfig<AdapterName, AdapterState> = {
   stateKey: string;
   type: AdapterName;
   initialState?: Partial<AdapterState>;
 };
 
-export type Adapter<Actions, State, AdapterName> = {
+export type FlowAdapter<Actions, State> = {
   getActions: () => Actions;
-  getSelectors: () => SelectorTypes<State, AdapterName>;
+  getSelectors: () => FlowSelectorTypes<State>;
   getInitialState: () => State;
   getReducer: () => ActionReducer<State, Action>;
 };

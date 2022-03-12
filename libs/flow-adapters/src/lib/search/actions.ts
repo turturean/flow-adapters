@@ -7,28 +7,20 @@ import {
   SearchActions,
 } from './models';
 
-export function createSearchActions<
-  Entity = unknown,
-  HasPagination extends boolean = false,
-  HasQuery extends boolean = false,
-  AdapterName = string
->(type: AdapterName) {
+export function createSearchActions<Entity = unknown, AdapterName = string>(
+  type: AdapterName
+): SearchActions<Entity> {
   const entityType = capitalize(String(type));
 
   return {
-    search: createAction(
-      `[${entityType}] search`,
-      // @ts-ignore
-      props<PropsSearch<HasPagination, HasQuery>>()
-    ),
+    search: createAction(`[${entityType}] search`, props<PropsSearch>()),
     searchSuccess: createAction(
       `[${entityType}] search success`,
-      // @ts-ignore
-      props<PropsSearchSuccess<Entity, HasPagination>>()
+      props<PropsSearchSuccess<Entity>>()
     ),
     searchFailed: createAction(
       `[${entityType}] search failed`,
       props<PropsSearchFailed>()
     ),
-  } as SearchActions<Entity, HasPagination, HasQuery>;
+  };
 }

@@ -16,16 +16,16 @@ export interface User {
 
 export type UserState = SearchEntitiesState<User> & SelectState;
 
-export const userAdapter = createSearchAdapter({
+export const userSearchAdapter = createSearchAdapter({
   stateKey: USER_STATE_KEY,
   type: 'user',
   primaryKey: 'uniqId',
   initialState: {},
   hasPagination: true,
-  hasQuery: true,
+  hasQuery: false,
 });
 
-export const selectAdapter = createSelectAdapter({
+export const userSelectAdapter = createSelectAdapter({
   stateKey: USER_STATE_KEY,
   type: 'user',
 });

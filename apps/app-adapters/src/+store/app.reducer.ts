@@ -2,9 +2,9 @@ import {
   Product,
   PRODUCT_STATE_KEY,
   productAdapter,
-  selectAdapter,
+  userSelectAdapter,
   USER_STATE_KEY,
-  userAdapter,
+  userSearchAdapter,
   UserState,
 } from './app.adapter';
 import { createReducer, on } from '@ngrx/store';
@@ -28,8 +28,8 @@ export interface AppState {
 }
 
 const userReducer = mergeReducers<UserState>([
-  selectAdapter.getReducer(),
-  userAdapter.getReducer(),
+  userSelectAdapter.getReducer(),
+  userSearchAdapter.getReducer(),
   appReducer,
 ]);
 

@@ -6,12 +6,6 @@ export type ActionTypes<T, Actions> = {
     string}${Capitalize<key>}`]: Actions[key];
 };
 
-export type SelectorTypes<State, AdapterName> = {
-  [key in keyof State & string as `select${Capitalize<
-    AdapterName & string
-  >}${Capitalize<key>}`]: MemoizedSelector<State, State[key]>;
-};
-
 export type FlowSelectorTypes<State> = {
   [key in keyof State & string as `${key}`]: MemoizedSelector<
     State,

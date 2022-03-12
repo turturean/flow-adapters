@@ -22,7 +22,7 @@ export const userSearchAdapter = createSearchAdapter({
   primaryKey: 'uniqId',
   initialState: {},
   hasPagination: true,
-  hasQuery: false,
+  hasQuery: true,
 });
 
 export const userSelectAdapter = createSelectAdapter({

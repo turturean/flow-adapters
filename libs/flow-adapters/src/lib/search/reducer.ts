@@ -10,18 +10,13 @@ import {
   SearchState,
 } from './models';
 
-export function createSearchReducer<
-  Entity,
-  AdapterName,
-  HasPagination,
-  HasQuery
->(
-  initialState: SearchState<Entity, true, true>,
-  actions: SearchActions<Entity>,
+export function createSearchReducer(
+  initialState: SearchState<any, true, true>,
+  actions: SearchActions<any, true, true>,
   options: SearchAdapterOptions<
-    AdapterName,
-    SearchState<Entity, HasPagination, HasQuery>,
-    SearchConfig<HasPagination, HasQuery>
+    string,
+    SearchState<any, true, true>,
+    SearchConfig<boolean, boolean>
   >
 ) {
   return createReducer(
@@ -29,7 +24,7 @@ export function createSearchReducer<
     on(actions.search, (state, action) => {
       const hasChangedQuery = options.hasQuery && action.query;
       const hasChangedPagination = options.hasPagination && action.pagination;
-      const newState: Partial<SearchState<Entity, true, true>> = {
+      const newState: Partial<SearchState<any, true, true>> = {
         isLoading: true,
       };
 
@@ -61,7 +56,7 @@ export function createSearchReducer<
     }),
     on(
       actions.searchSuccess,
-      (state, action: PropsSearchSuccess<Entity> & TypedAction<string>) => {
+      (state, action: PropsSearchSuccess<any> & TypedAction<string>) => {
         let newState: Partial<any> = {
           isLoading: false,
         };

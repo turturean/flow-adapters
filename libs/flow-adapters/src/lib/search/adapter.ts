@@ -9,7 +9,8 @@ import {
   SearchQueryState,
   SearchState,
 } from './models';
-import { FlowAdapter } from '../types';
+import { FlowSelectorTypes } from '../types';
+import { Action, ActionReducer } from '@ngrx/store/src/models';
 
 export function createSearchAdapter<
   Entity extends { [key: string]: any },
@@ -22,10 +23,7 @@ export function createSearchAdapter<
     SearchState<Entity, HasPagination, HasQuery>,
     SearchConfig<HasPagination, HasQuery>
   >
-): FlowAdapter<
-  SearchActions<Entity>,
-  SearchState<Entity, HasPagination, HasQuery>
-> {
+) {
   const {
     type,
     stateKey,
@@ -46,22 +44,22 @@ export function createSearchAdapter<
       : null),
     ...options.initialState,
   };
-  const actions = createSearchActions<Entity, AdapterName>(type);
-  const selectors = createSearchSelectors<Entity, HasPagination, HasQuery>(
-    stateKey,
-    initialState
-  );
-  const reducer = createSearchReducer<
-    Entity,
-    AdapterName,
-    HasPagination,
-    HasQuery
-  >(initialState, actions, options);
+  const actions = createSearchActions(type);
+  const selectors = createSearchSelectors(stateKey, initialState);
+  const reducer = createSearchReducer(initialState, actions, options);
 
   return {
-    getSelectors: () => selectors,
-    getActions: () => actions,
-    getReducer: () => reducer,
-    getInitialState: () => initialState,
+    getSelectors: () =>
+      selectors as FlowSelectorTypes<
+        SearchState<Entity, HasPagination, HasQuery>
+      >,
+    getActions: () => actions as SearchActions<Entity, HasPagination, HasQuery>,
+    getReducer: () =>
+      reducer as ActionReducer<
+        SearchState<Entity, HasPagination, HasQuery>,
+        Action
+      >,
+    getInitialState: () =>
+      initialState as SearchState<Entity, HasPagination, HasQuery>,
   };
 }

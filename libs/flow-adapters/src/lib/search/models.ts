@@ -49,7 +49,10 @@ export type SearchSort = {
   sortDir: string;
 };
 
-export type PropsSearch = QueryArgs & PaginationArgs;
+export type PropsSearch<HasPagination, HasQuery> = (HasQuery extends true
+  ? QueryArgs
+  : unknown) &
+  (HasPagination extends true ? PaginationArgs : unknown);
 
 export type PropsSearchSuccess<Entity> = {
   entities: Entity[];
@@ -59,10 +62,16 @@ export interface PropsSearchFailed {
   error: Error | null;
 }
 
-export interface SearchActions<Entity = unknown> {
+export interface SearchActions<
+  Entity = unknown,
+  HasPagination = false,
+  HasQuery = false
+> {
   search: ActionCreator<
     string,
-    (props: PropsSearch) => PropsSearch & TypedAction<string>
+    (
+      props: PropsSearch<HasPagination, HasQuery>
+    ) => PropsSearch<HasPagination, HasQuery> & TypedAction<string>
   >;
   searchSuccess: ActionCreator<
     string,

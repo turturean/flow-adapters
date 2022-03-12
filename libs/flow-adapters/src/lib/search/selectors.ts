@@ -1,12 +1,11 @@
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { FlowSelectorTypes } from '../types';
 import { SearchState } from './models';
 
-export function createSearchSelectors<Entity, HasPagination, HasQuery>(
+export function createSearchSelectors<T>(
   stateKey: string,
-  initialState: SearchState<Entity, HasPagination, HasQuery>
-) {
+  initialState: SearchState<any, true, true>
+): T {
   const selectState = createFeatureSelector<{ [key: string]: any }>(stateKey);
   const keys = Object.keys(initialState) as (keyof { [key: string]: any })[];
 
@@ -17,7 +16,7 @@ export function createSearchSelectors<Entity, HasPagination, HasQuery>(
       ...acc,
       [propKey]: createSelector(selectState, (state) => state && state[key]),
     };
-  }, {}) as FlowSelectorTypes<SearchState<Entity, HasPagination, HasQuery>>;
+  }, {}) as T;
 }
 
 // IMPORTANT

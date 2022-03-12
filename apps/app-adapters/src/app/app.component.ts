@@ -33,7 +33,10 @@ export class AppComponent {
 
   userSearch() {
     this.store.dispatch(
-      userSearchActions.search({ pagination: { page: 1, perPage: 30 } })
+      userSearchActions.search({
+        query: {},
+        pagination: { page: 1, perPage: 30 },
+      })
     );
     this.store.dispatch(
       userSelectActions.selectItems({

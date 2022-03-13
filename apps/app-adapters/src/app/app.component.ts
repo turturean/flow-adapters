@@ -2,11 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { UserState } from '../+store/app.adapter';
-import {
-  getUsers,
-  userSearchSelectors,
-  userSelectSelectors,
-} from '../+store/app.selectors';
+import { getUsers, userSearchSelectors, userSelectSelectors } from '../+store/app.selectors';
 import { userSearchActions, userSelectActions } from '../+store/app.actions';
 
 @Component({
@@ -25,9 +21,7 @@ export class AppComponent {
   selected$ = this.store.select(userSelectSelectors.selectedItems);
 
   constructor(private store: Store<UserState>) {
-    this.store.dispatch(
-      userSelectActions.selectItems({ selectedItem: ['12', '23'] })
-    );
+    this.store.dispatch(userSelectActions.selectItems({ selectedItem: ['12', '23'] }));
     this.store.dispatch(userSearchActions.search({}));
   }
 
@@ -38,6 +32,11 @@ export class AppComponent {
         pagination: { page: 1, perPage: 30 },
       })
     );
+
+    userSearchActions.searchSuccess({
+      entities: [],
+      // pagination: {page: 1, total: 10, perPage: 40}
+    });
     this.store.dispatch(
       userSelectActions.selectItems({
         selectedItem: [String(Math.random()), '23'],

@@ -1,21 +1,6 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
-
 import { SelectState } from './models';
-import { FlowSelectorTypes } from '../types';
+import { createSelectors } from '../tools/adapter-selector';
 
-export function createSelectSelectors<State extends SelectState>(
-  stateKey: string,
-  initialState: State
-): FlowSelectorTypes<State> {
-  const selectState = createFeatureSelector<State>(stateKey);
-  const keys = Object.keys(initialState) as (keyof SelectState)[];
-
-  return keys.reduce((acc, key) => {
-    const propKey = `${key}`;
-
-    return {
-      ...acc,
-      [propKey]: createSelector(selectState, (state) => state && state[key]),
-    };
-  }, {}) as FlowSelectorTypes<State>;
+export function createSelectSelectors<T>(stateKey: string, initialState: SelectState) {
+  return createSelectors<T>(stateKey, initialState) as T;
 }

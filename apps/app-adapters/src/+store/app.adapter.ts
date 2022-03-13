@@ -1,9 +1,4 @@
-import {
-  createSearchAdapter,
-  createSelectAdapter,
-  SearchEntitiesState,
-  SelectState,
-} from 'flow-adapters';
+import { createSearchAdapter, createSelectAdapter, SearchEntitiesState, SelectState } from 'flow-adapters';
 
 export const USER_STATE_KEY = 'user';
 
@@ -20,9 +15,16 @@ export const userSearchAdapter = createSearchAdapter({
   stateKey: USER_STATE_KEY,
   type: 'user',
   primaryKey: 'uniqId',
-  initialState: {},
+  initialState: {
+    page: 4,
+    perPage: 100,
+    total: 200,
+    query: { test: 'asdas' },
+    sort: { sortColumn: '', sortDir: 'asc' },
+  },
   hasPagination: true,
   hasQuery: true,
+  hasSort: true,
 });
 
 export const userSelectAdapter = createSelectAdapter({

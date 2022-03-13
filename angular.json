@@ -17,10 +17,7 @@
             "polyfills": "apps/app-adapters/src/polyfills.ts",
             "tsConfig": "apps/app-adapters/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "apps/app-adapters/src/favicon.ico",
-              "apps/app-adapters/src/assets"
-            ],
+            "assets": ["apps/app-adapters/src/favicon.ico", "apps/app-adapters/src/assets"],
             "styles": ["apps/app-adapters/src/styles.scss"],
             "scripts": []
           },
@@ -78,10 +75,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/app-adapters/src/**/*.ts",
-              "apps/app-adapters/src/**/*.html"
-            ]
+            "lintFilePatterns": ["apps/app-adapters/src/**/*.ts", "apps/app-adapters/src/**/*.html"]
           }
         },
         "test": {
@@ -124,10 +118,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/flow-adapters/src/**/*.ts",
-              "libs/flow-adapters/src/**/*.html"
-            ]
+            "lintFilePatterns": ["libs/flow-adapters/src/**/*.ts", "libs/flow-adapters/src/**/*.html"]
           }
         }
       },
@@ -162,10 +153,7 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "libs/select/src/**/*.ts",
-              "libs/select/src/**/*.html"
-            ]
+            "lintFilePatterns": ["libs/select/src/**/*.ts", "libs/select/src/**/*.html"]
           }
         }
       }

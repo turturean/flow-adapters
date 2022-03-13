@@ -13,12 +13,10 @@ import {
 export function createSearchReducer(
   initialState: SearchState<any, true, true>,
   actions: SearchActions<any, true, true>,
-  options: SearchAdapterOptions<
-    string,
-    SearchState<any, true, true>,
-    SearchConfig<boolean, boolean>
-  >
+  options: SearchAdapterOptions<string, SearchState<any, true, true>, SearchConfig<boolean, boolean, boolean>>
 ) {
+  const primaryKey = options.primaryKey || 'id';
+
   return createReducer(
     initialState,
     on(actions.search, (state, action) => {
@@ -54,41 +52,34 @@ export function createSearchReducer(
         ...newState,
       };
     }),
-    on(
-      actions.searchSuccess,
-      (state, action: PropsSearchSuccess<any> & TypedAction<string>) => {
-        let newState: Partial<any> = {
-          isLoading: false,
-        };
-        const primaryKey = state.primaryKey;
+    on(actions.searchSuccess, (state, action: PropsSearchSuccess<any, true> & TypedAction<string>) => {
+      let newState: Partial<any> = {
+        isLoading: false,
+      };
 
-        newState.ids = action.entities.map<string>(
-          (entity: { [key: string]: any }) => String(entity[primaryKey])
-        );
-        newState.entities = action.entities.reduce(
-          (accumulator, entity: { [key: string]: any }) => ({
-            ...accumulator,
-            [String(entity[primaryKey])]: entity,
-          }),
-          {}
-        );
+      newState.ids = action.entities.map<string>((entity: { [key: string]: any }) => String(entity[primaryKey]));
+      newState.entities = action.entities.reduce(
+        (accumulator, entity: { [key: string]: any }) => ({
+          ...accumulator,
+          [String(entity[primaryKey])]: entity,
+        }),
+        {}
+      );
 
-        if (options.hasPagination) {
-          const pageState: Partial<PaginationState> = {};
-          pageState.page = action?.pagination?.page || initialState.page;
-          pageState.perPage =
-            action?.pagination?.perPage || initialState.perPage;
-          pageState.total = action?.pagination?.total || initialState.total;
+      if (options.hasPagination) {
+        const pageState: Partial<PaginationState> = {};
+        pageState.page = action?.pagination?.page || initialState.page;
+        pageState.perPage = action?.pagination?.perPage || initialState.perPage;
+        pageState.total = action?.pagination?.total || initialState.total;
 
-          newState = { ...newState, ...pageState };
-        }
-
-        return {
-          ...state,
-          ...newState,
-        };
+        newState = { ...newState, ...pageState };
       }
-    ),
+
+      return {
+        ...state,
+        ...newState,
+      };
+    }),
     on(actions.searchFailed, (state, { error }) => {
       let newState: Partial<any> = {
         ids: [],

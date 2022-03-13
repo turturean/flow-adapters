@@ -1,47 +1,39 @@
 import { createSearchActions } from './actions';
 import { createSearchReducer } from './reducer';
-import { createSearchSelectors } from './selectors';
 import {
   SearchActions,
   SearchAdapterOptions,
   SearchConfig,
   SearchPaginationState,
   SearchQueryState,
+  SearchSortState,
   SearchState,
 } from './models';
-import { FlowSelectorTypes } from '../types';
-import { Action, ActionReducer } from '@ngrx/store/src/models';
+import { createSearchSelectors } from './selectors';
+import { FlowReducer, FlowSelector } from '../types';
 
 export function createSearchAdapter<
   Entity extends { [key: string]: any },
+  AdapterName extends string,
   HasPagination extends boolean,
   HasQuery extends boolean,
-  AdapterName extends string
+  HasSort extends boolean
 >(
   options: SearchAdapterOptions<
     AdapterName,
-    SearchState<Entity, HasPagination, HasQuery>,
-    SearchConfig<HasPagination, HasQuery>
+    SearchState<Entity, HasPagination, HasQuery, HasSort>,
+    SearchConfig<HasPagination, HasQuery, HasSort>
   >
 ) {
-  const {
-    type,
-    stateKey,
-    primaryKey = 'id',
-    hasQuery,
-    hasPagination,
-  } = options;
-  const initialState: SearchState<Entity, HasPagination, HasQuery> = {
+  const { type, stateKey } = options;
+  const initialState: SearchState<Entity, HasPagination, HasQuery, HasSort> = {
     isLoading: false,
     error: null,
     ids: [],
     entities: {},
-    primaryKey: primaryKey,
-    sort: null,
-    ...(hasQuery ? ({ query: {} } as SearchQueryState<true>) : null),
-    ...(hasPagination
-      ? ({ page: 1, perPage: 10, total: 0 } as SearchPaginationState<true>)
-      : null),
+    ...(options.hasSort ? ({ sort: null } as SearchSortState<true>) : null),
+    ...(options.hasQuery ? ({ query: {} } as SearchQueryState<true>) : null),
+    ...(options.hasPagination ? ({ page: 1, perPage: 10, total: 0 } as SearchPaginationState<true>) : null),
     ...options.initialState,
   };
   const actions = createSearchActions(type);
@@ -49,17 +41,9 @@ export function createSearchAdapter<
   const reducer = createSearchReducer(initialState, actions, options);
 
   return {
-    getSelectors: () =>
-      selectors as FlowSelectorTypes<
-        SearchState<Entity, HasPagination, HasQuery>
-      >,
+    getInitialState: () => initialState as SearchState<Entity, HasPagination, HasQuery, HasSort>,
     getActions: () => actions as SearchActions<Entity, HasPagination, HasQuery>,
-    getReducer: () =>
-      reducer as ActionReducer<
-        SearchState<Entity, HasPagination, HasQuery>,
-        Action
-      >,
-    getInitialState: () =>
-      initialState as SearchState<Entity, HasPagination, HasQuery>,
+    getSelectors: () => selectors as FlowSelector<SearchState<Entity, HasPagination, HasQuery, HasSort>>,
+    getReducer: () => reducer as FlowReducer<SearchState<Entity, HasPagination, HasQuery, HasSort>>,
   };
 }
